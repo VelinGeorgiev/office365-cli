@@ -9,10 +9,11 @@ import {
 import SpoCommand from '../../SpoCommand';
 import { ContextInfo, ClientSvcResponse, ClientSvcResponseContents } from '../../spo';
 import { Auth } from '../../../../Auth';
-import { SpoPropertyBagBaseCommand, IdentityResponse } from './propertybag-base';
+import { SpoPropertyBagBaseCommand } from './propertybag-base';
 import GlobalOptions from '../../../../GlobalOptions';
 import Utils from '../../../../Utils';
 import { BasePermissions, PermissionKind } from '../../common/base-permissions';
+import { IdentityResponse } from '../../common/IdentityResponse';
 
 const vorpal: Vorpal = require('../../../../vorpal-init');
 

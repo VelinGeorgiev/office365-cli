@@ -4,15 +4,11 @@ import Utils from '../../../../Utils';
 import { ClientSvcResponseContents, ClientSvcResponse } from "../../spo";
 import config from '../../../../config';
 import { BasePermissions } from "../../common/base-permissions";
+import { IdentityResponse } from "../../common/IdentityResponse";
 
 export interface Property {
   key: string;
   value: any;
-};
-
-export interface IdentityResponse {
-  objectIdentity: string;
-  serverRelativeUrl: string;
 };
 
 export abstract class SpoPropertyBagBaseCommand extends SpoCommand {

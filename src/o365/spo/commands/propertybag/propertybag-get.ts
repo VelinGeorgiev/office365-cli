@@ -9,8 +9,9 @@ import {
 import SpoCommand from '../../SpoCommand';
 import { ContextInfo } from '../../spo';
 import { Auth } from '../../../../Auth';
-import { SpoPropertyBagBaseCommand, IdentityResponse, Property } from './propertybag-base';
+import { SpoPropertyBagBaseCommand, Property } from './propertybag-base';
 import GlobalOptions from '../../../../GlobalOptions';
+import { IdentityResponse } from '../../common/IdentityResponse';
 
 const vorpal: Vorpal = require('../../../../vorpal-init');
 

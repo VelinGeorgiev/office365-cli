@@ -7,7 +7,6 @@ const command: Command = require('./propertybag-set');
 import * as assert from 'assert';
 import * as request from 'request-promise-native';
 import Utils from '../../../../Utils';
-import { IdentityResponse } from './propertybag-base';
 import config from '../../../../config';
 
 describe(commands.PROPERTYBAG_SET, () => {
