@@ -68,7 +68,7 @@ class SpoPropertyBagGetCommand extends SpoPropertyBagBaseCommand {
           cmd.log('');
         }
 
-        return this.requestObjectIdentity(args.options.webUrl, cmd);
+        return this.requestObjectIdentity(args.options.webUrl, this.siteAccessToken, this.formDigestValue, cmd);
       })
       .then((identityResp: IdentityResponse): Promise<Object> => {
         if (this.debug) {
