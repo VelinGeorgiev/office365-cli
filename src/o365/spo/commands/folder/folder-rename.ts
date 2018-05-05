@@ -11,8 +11,8 @@ import SpoCommand from '../../SpoCommand';
 import Utils from '../../../../Utils';
 import { Auth } from '../../../../Auth';
 import * as url from 'url';
-import { SpoClientSvcCommand, IdentityResponse } from "../../SpoClientSvcCommand";
 import { ContextInfo, ClientSvcResponse, ClientSvcResponseContents } from '../../spo';
+import { ClientSvcCommons, IdentityResponse } from '../../common/client-svc-commons';
 
 const vorpal: Vorpal = require('../../../../vorpal-init');
 
@@ -26,7 +26,7 @@ interface Options extends GlobalOptions {
   name: string;
 }
 
-class SpoFolderRenameCommand extends SpoClientSvcCommand {
+class SpoFolderRenameCommand extends SpoCommand {
 
   public get name(): string {
     return commands.FOLDER_RENAME;
@@ -43,6 +43,7 @@ class SpoFolderRenameCommand extends SpoClientSvcCommand {
 
   public commandAction(cmd: CommandInstance, args: CommandArgs, cb: () => void): void {
     const resource: string = Auth.getResourceFromUrl(args.options.webUrl);
+    const clientSvcCommons: ClientSvcCommons = new ClientSvcCommons(cmd, this.debug);
     let siteAccessToken: string = '';
     let formDigestValue: string = '';
     let serverRelativeUrl: string = '';
@@ -67,7 +68,7 @@ class SpoFolderRenameCommand extends SpoClientSvcCommand {
         cmd.log('');
       }
 
-      return this.requestObjectIdentity(args.options.webUrl,siteAccessToken, formDigestValue, cmd);
+      return clientSvcCommons.requestObjectIdentity(args.options.webUrl,siteAccessToken, formDigestValue);
     })
     .then((webObjectIdentity: IdentityResponse): Promise<IdentityResponse> => {
       
@@ -79,42 +80,8 @@ class SpoFolderRenameCommand extends SpoClientSvcCommand {
 
       let webRelativeUrl = this.getWebRelativeUrlFromWebUrl(args.options.webUrl);
       serverRelativeUrl = `${webRelativeUrl}${this.formatRelativeUrl(args.options.folderUrl)}`;
-      const requestOptions: any = {
-        url: `${args.options.webUrl}/_vti_bin/client.svc/ProcessQuery`,
-        headers: Utils.getRequestHeaders({
-          authorization: `Bearer ${siteAccessToken}`,
-          'X-RequestDigest': formDigestValue
-        }),
-        body: `<Request AddExpandoFieldTypeSuffix="true" SchemaVersion="15.0.0.0" LibraryVersion="16.0.0.0" ApplicationName="${config.applicationName}" xmlns="http://schemas.microsoft.com/sharepoint/clientquery/2009"><Actions><ObjectPath Id="23" ObjectPathId="22" /><ObjectIdentityQuery Id="24" ObjectPathId="22" /><Query Id="25" ObjectPathId="22"><Query SelectAllProperties="false"><Properties><Property Name="Name" ScalarProperty="true" /><Property Name="ServerRelativeUrl" ScalarProperty="true" /></Properties></Query></Query></Actions><ObjectPaths><Method Id="22" ParentId="5" Name="GetFolderByServerRelativeUrl"><Parameters><Parameter Type="String">${serverRelativeUrl}</Parameter></Parameters></Method><Identity Id="5" Name="${webObjectIdentity.objectIdentity}" /></ObjectPaths></Request>`
-      };
 
-      if (this.debug) {
-        cmd.log('Executing web request...');
-        cmd.log(requestOptions);
-        cmd.log('');
-      }
-
-      return new Promise<IdentityResponse>((resolve: any, reject: any): void => {
-        request.post(requestOptions).then((res: any) => {
-  
-          const json: ClientSvcResponse = JSON.parse(res);
-          const contents: ClientSvcResponseContents = json.find(x => { return x['ErrorInfo']; });
-          if (contents && contents.ErrorInfo) {
-            return reject(contents.ErrorInfo.ErrorMessage || 'ClientSvc unknown error');
-          }
-  
-          const identityObject = json.find(x => { return x['_ObjectIdentity_'] });
-          if (identityObject) {
-            return resolve(
-              {
-                objectIdentity: identityObject['_ObjectIdentity_'],
-                serverRelativeUrl: identityObject['ServerRelativeUrl']
-              });
-          }
-  
-          reject('Cannot proceed. _ObjectIdentity_ not found'); // this is not supposed to happen
-        }, (err: any): void => { reject(err); });
-      });
+      return clientSvcCommons.requestFolderObjectIdentity(webObjectIdentity, args.options.webUrl, siteAccessToken, formDigestValue);
     })
     .then((folderObjectIdentity: IdentityResponse): Promise<void> => {
       if (this.debug) {

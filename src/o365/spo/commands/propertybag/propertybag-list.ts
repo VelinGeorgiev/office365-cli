@@ -11,7 +11,7 @@ import { ContextInfo } from '../../spo';
 import { Auth } from '../../../../Auth';
 import { SpoPropertyBagBaseCommand, Property } from './propertybag-base';
 import GlobalOptions from '../../../../GlobalOptions';
-import { IdentityResponse } from "../../SpoClientSvcCommand";
+import { ClientSvcCommons, IdentityResponse } from '../../common/client-svc-commons';
 
 const vorpal: Vorpal = require('../../../../vorpal-init');
 
@@ -42,6 +42,7 @@ class SpoPropertyBagListCommand extends SpoPropertyBagBaseCommand {
 
   public commandAction(cmd: CommandInstance, args: CommandArgs, cb: () => void): void {
     const resource: string = Auth.getResourceFromUrl(args.options.webUrl);
+    const clientSvcCommons: ClientSvcCommons = new ClientSvcCommons(cmd, this.debug);
 
     if (this.debug) {
       cmd.log(`Retrieving access token for ${resource}...`);
@@ -67,7 +68,7 @@ class SpoPropertyBagListCommand extends SpoPropertyBagBaseCommand {
           cmd.log('');
         }
 
-        return this.requestObjectIdentity(args.options.webUrl, this.siteAccessToken, this.formDigestValue, cmd);
+        return clientSvcCommons.requestObjectIdentity(args.options.webUrl, this.siteAccessToken, this.formDigestValue);
       })
       .then((identityResp: IdentityResponse): Promise<Object> => {
         if (this.debug) {

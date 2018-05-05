@@ -8,7 +8,7 @@ import * as assert from 'assert';
 import * as request from 'request-promise-native';
 import Utils from '../../../../Utils';
 import config from '../../../../config';
-import { IdentityResponse } from "../../SpoClientSvcCommand";
+import { IdentityResponse } from '../../common/client-svc-commons';
 
 describe(commands.PROPERTYBAG_SET, () => {
   let vorpal: Vorpal;
