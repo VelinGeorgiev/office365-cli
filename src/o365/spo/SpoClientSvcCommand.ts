@@ -1,11 +1,15 @@
 import SpoCommand from "./SpoCommand";
-import { IdentityResponse } from "./common/IdentityResponse";
 import Utils from "../../Utils";
 import { ClientSvcResponseContents, ClientSvcResponse } from "./spo";
 import * as request from 'request-promise-native';
 import config from "../../config";
 
-export default abstract class SpoClientSvcCommand extends SpoCommand {
+export interface IdentityResponse {
+  objectIdentity: string;
+  serverRelativeUrl: string;
+};
+
+export abstract class SpoClientSvcCommand extends SpoCommand {
   
   /**
    * Requests web object itentity for the current web.
@@ -53,5 +57,4 @@ export default abstract class SpoClientSvcCommand extends SpoCommand {
       }, (err: any): void => { reject(err); });
     });
   }
-
 }

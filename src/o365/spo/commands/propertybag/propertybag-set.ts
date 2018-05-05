@@ -1,19 +1,19 @@
 import auth from '../../SpoAuth';
 import config from '../../../../config';
 import commands from '../../commands';
+import SpoCommand from '../../SpoCommand';
 import * as request from 'request-promise-native';
 import {
   CommandOption,
   CommandValidate
 } from '../../../../Command';
-import SpoCommand from '../../SpoCommand';
 import { ContextInfo, ClientSvcResponse, ClientSvcResponseContents } from '../../spo';
 import { Auth } from '../../../../Auth';
 import { SpoPropertyBagBaseCommand } from './propertybag-base';
 import GlobalOptions from '../../../../GlobalOptions';
 import Utils from '../../../../Utils';
 import { BasePermissions, PermissionKind } from '../../common/base-permissions';
-import { IdentityResponse } from '../../common/IdentityResponse';
+import { IdentityResponse } from "../../SpoClientSvcCommand";
 
 const vorpal: Vorpal = require('../../../../vorpal-init');
 

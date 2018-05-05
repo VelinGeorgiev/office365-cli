@@ -1,10 +1,9 @@
-import SpoClientSvcCommand from "../../SpoClientSvcCommand";
+import { SpoClientSvcCommand, IdentityResponse } from "../../SpoClientSvcCommand";
 import * as request from 'request-promise-native';
 import Utils from '../../../../Utils';
 import { ClientSvcResponseContents, ClientSvcResponse } from "../../spo";
 import config from '../../../../config';
 import { BasePermissions } from "../../common/base-permissions";
-import { IdentityResponse } from "../../common/IdentityResponse";
 
 export interface Property {
   key: string;

@@ -3,119 +3,21 @@ import Command, { CommandValidate, CommandOption, CommandError } from '../../../
 import * as sinon from 'sinon';
 import appInsights from '../../../../appInsights';
 import auth, { Site } from '../../SpoAuth';
-const command: Command = require('./propertybag-set');
+const command: Command = require('./folder-rename');
 import * as assert from 'assert';
 import * as request from 'request-promise-native';
 import Utils from '../../../../Utils';
 import config from '../../../../config';
 import { IdentityResponse } from "../../SpoClientSvcCommand";
 
-describe(commands.PROPERTYBAG_SET, () => {
+describe(commands.FOLDER_RENAME, () => {
   let vorpal: Vorpal;
   let log: string[];
   let cmdInstance: any;
   let cmdInstanceLogSpy: sinon.SinonSpy;
   let trackEvent: any;
   let telemetry: any;
-  const stubAllPostRequests = (
-    requestObjectIdentityResp: any = null,
-    folderObjectIdentityResp: any = null,
-    setPropertyResp: any = null,
-    effectiveBasePermissionsResp: any = null
-  ): sinon.SinonStub => {
-    return sinon.stub(request, 'post').callsFake((opts) => {
-      if (opts.url.indexOf('/common/oauth2/token') > -1) {
-        return Promise.resolve('abc');
-      }
-
-      if (opts.url.indexOf('/_api/contextinfo') > -1) {
-        return Promise.resolve({
-          FormDigestValue: 'abc'
-        });
-      }
-
-      // fake requestObjectIdentity
-      if (opts.body.indexOf('3747adcd-a3c3-41b9-bfab-4a64dd2f1e0a') > -1) {
-        if (requestObjectIdentityResp) {
-          return requestObjectIdentityResp;
-        } else {
-          return Promise.resolve(JSON.stringify([{
-            "SchemaVersion": "15.0.0.0",
-            "LibraryVersion": "16.0.7331.1206",
-            "ErrorInfo": null,
-            "TraceCorrelationId": "38e4499e-10a2-5000-ce25-77d4ccc2bd96"
-          }, 7, {
-            "_ObjectType_": "SP.Web",
-            "_ObjectIdentity_": "38e4499e-10a2-5000-ce25-77d4ccc2bd96|740c6a0b-85e2-48a0-a494-e0f1759d4a77:site:f3806c23-0c9f-42d3-bc7d-3895acc06d73:web:5a39e548-b3d7-4090-9cb9-0ce7cd85d275",
-            "ServerRelativeUrl": "\u002fsites\u002fabc"
-          }]));
-        }
-      }
-
-      // fake requestFolderObjectIdentity
-      if (opts.body.indexOf('GetFolderByServerRelativeUrl') > -1) {
-        if (folderObjectIdentityResp) {
-          return folderObjectIdentityResp;
-        } else {
-          return Promise.resolve(JSON.stringify([
-            {
-              "SchemaVersion": "15.0.0.0", "LibraryVersion": "16.0.7331.1206", "ErrorInfo": null, "TraceCorrelationId": "93e5499e-00f1-5000-1f36-3ab12512a7e9"
-            }, 18, {
-              "IsNull": false
-            }, 19, {
-              "_ObjectIdentity_": "93e5499e-00f1-5000-1f36-3ab12512a7e9|740c6a0b-85e2-48a0-a494-e0f1759d4aa7:site:f3806c23-0c9f-42d3-bc7d-3895acc06dc3:web:5a39e548-b3d7-4090-9cb9-0ce7cd85d2c5:folder:df4291de-226f-4c39-bbcc-df21915f5fc1"
-            }, 20, {
-              "_ObjectType_": "SP.Folder", "_ObjectIdentity_": "93e5499e-00f1-5000-1f36-3ab12512a7e9|740c6a0b-85e2-48a0-a494-e0f1759d4aa7:site:f3806c23-0c9f-42d3-bc7d-3895acc06dc3:web:5a39e548-b3d7-4090-9cb9-0ce7cd85d2c5:folder:df4291de-226f-4c39-bbcc-df21915f5fc1", "Properties": {
-                "_ObjectType_": "SP.PropertyValues", "vti_folderitemcount$  Int32": 0, "vti_level$  Int32": 1, "vti_parentid": "{1C5271C8-DB93-459E-9C18-68FC33EFD856}", "vti_winfileattribs": "00000012", "vti_candeleteversion": "true", "vti_foldersubfolderitemcount$  Int32": 0, "vti_timelastmodified": "\/Date(2017,10,7,11,29,31,0)\/", "vti_dirlateststamp": "\/Date(2018,1,12,22,34,31,0)\/", "vti_isscriptable": "false", "vti_isexecutable": "false", "vti_metainfoversion$  Int32": 1, "vti_isbrowsable": "true", "vti_timecreated": "\/Date(2017,10,7,11,29,31,0)\/", "vti_etag": "\"{DF4291DE-226F-4C39-BBCC-DF21915F5FC1},256\"", "vti_hassubdirs": "true", "vti_docstoreversion$  Int32": 256, "vti_rtag": "rt:DF4291DE-226F-4C39-BBCC-DF21915F5FC1@00000000256", "vti_docstoretype$  Int32": 1, "vti_replid": "rid:{DF4291DE-226F-4C39-BBCC-DF21915F5FC1}"
-              }
-            }
-          ]));
-        }
-      }
-
-      // fake property set success for site and folder
-      if (opts.body.indexOf('SetFieldValue') > -1) {
-        if (setPropertyResp) {
-          return setPropertyResp;
-        } else {
-
-          return Promise.resolve(JSON.stringify([
-            {
-              "SchemaVersion": "15.0.0.0",
-              "LibraryVersion": "16.0.7507.1203",
-              "ErrorInfo": null,
-              "TraceCorrelationId": "986d549e-d035-5000-2a28-c7306cd17024"
-            }]));
-        }
-      }
-
-      if (opts.body.indexOf('EffectiveBasePermissions') > -1) {
-        if (effectiveBasePermissionsResp) {
-          return effectiveBasePermissionsResp;
-        } else {
-          // effective base permissions (success case)
-          return Promise.resolve(JSON.stringify([
-            {
-              "SchemaVersion": "15.0.0.0",
-              "LibraryVersion": "16.0.7514.1204",
-              "ErrorInfo": null,
-              "TraceCorrelationId": "2d64579e-00e9-5000-71ce-fdad238b27fc"
-            }, 7, {
-              "_ObjectType_": "SP.Web",
-              "_ObjectIdentity_": "2d64579e-00e9-5000-71ce-fdad238b27fc|740c6a0b-85e2-48a0-a494-e0f1759d4aa7:site:692102df-335d-41e2-aa44-425b626037ea:web:f7fb12c3-ca68-4060-b1b0-c27a6bfffeb2",
-              "EffectiveBasePermissions": {
-                "_ObjectType_": "SP.BasePermissions",
-                "High": 2147483647,
-                "Low": 4294967295
-              }
-            }
-          ]));
-        }
-      }
-
-      return Promise.reject('Invalid request');
-    });
-  }
+  let stubAllPostRequests: any;
 
   before(() => {
     sinon.stub(auth, 'restoreAuth').callsFake(() => Promise.resolve());
@@ -123,6 +25,77 @@ describe(commands.PROPERTYBAG_SET, () => {
     trackEvent = sinon.stub(appInsights, 'trackEvent').callsFake((t) => {
       telemetry = t;
     });
+
+    stubAllPostRequests  = (
+      requestObjectIdentityResp: any = null,
+      folderObjectIdentityResp: any = null,
+      setPropertyResp: any = null,
+      effectiveBasePermissionsResp: any = null
+    ): sinon.SinonStub => {
+      return sinon.stub(request, 'post').callsFake((opts) => {
+        if (opts.url.indexOf('/common/oauth2/token') > -1) {
+          return Promise.resolve('abc');
+        }
+  
+        if (opts.url.indexOf('/_api/contextinfo') > -1) {
+          return Promise.resolve({
+            FormDigestValue: 'abc'
+          });
+        }
+  
+        // fake requestObjectIdentity
+        if (opts.body.indexOf('3747adcd-a3c3-41b9-bfab-4a64dd2f1e0a') > -1) {
+          if (requestObjectIdentityResp) {
+            return requestObjectIdentityResp;
+          } else {
+            return Promise.resolve(JSON.stringify([{
+              "SchemaVersion": "15.0.0.0",
+              "LibraryVersion": "16.0.7331.1206",
+              "ErrorInfo": null,
+              "TraceCorrelationId": "38e4499e-10a2-5000-ce25-77d4ccc2bd96"
+            }, 7, {
+              "_ObjectType_": "SP.Web",
+              "_ObjectIdentity_": "38e4499e-10a2-5000-ce25-77d4ccc2bd96|740c6a0b-85e2-48a0-a494-e0f1759d4a77:site:f3806c23-0c9f-42d3-bc7d-3895acc06d73:web:5a39e548-b3d7-4090-9cb9-0ce7cd85d275",
+              "ServerRelativeUrl": "\u002fsites\u002fabc"
+            }]));
+          }
+        }
+  
+        // fake requestFolderObjectIdentity
+        if (opts.body.indexOf('GetFolderByServerRelativeUrl') > -1) {
+          if (folderObjectIdentityResp) {
+            return folderObjectIdentityResp;
+          } else {
+            return Promise.resolve(JSON.stringify([
+              {
+              "SchemaVersion":"15.0.0.0","LibraryVersion":"16.0.7618.1204","ErrorInfo":null,"TraceCorrelationId":"e52c649e-a019-5000-c38d-8d334a079fd2"
+              },27,{
+              "IsNull":false
+              },28,{
+              "_ObjectIdentity_":"e52c649e-a019-5000-c38d-8d334a079fd2|740c6a0b-85e2-48a0-a494-e0f1759d4aa7:site:7f1c42fe-5933-430d-bafb-6c839aa87a5c:web:30a3906a-a55e-4f48-aaae-ecf45346bf53:folder:10c46485-5035-475f-a40f-d842bab30708"},29,{
+              "_ObjectType_":"SP.Folder","_ObjectIdentity_":"e52c649e-a019-5000-c38d-8d334a079fd2|740c6a0b-85e2-48a0-a494-e0f1759d4aa7:site:7f1c42fe-5933-430d-bafb-6c839aa87a5c:web:30a3906a-a55e-4f48-aaae-ecf45346bf53:folder:10c46485-5035-475f-a40f-d842bab30708","Name":"Test2","ServerRelativeUrl":"\u002fsites\u002fabc\u002fShared Documents\u002fTest2"
+              }
+              ]));
+          }
+        }
+  
+        // fake folder rename/move success
+        if (opts.body.indexOf('Name="MoveTo"') > -1) {
+          if (setPropertyResp) {
+            return setPropertyResp;
+          } else {
+  
+            return Promise.resolve(JSON.stringify([
+              {
+              "SchemaVersion":"15.0.0.0","LibraryVersion":"16.0.7618.1204","ErrorInfo":null,"TraceCorrelationId":"e52c649e-5023-5000-c38d-86fa815f3928"
+              }
+              ]));
+          }
+        }
+  
+        return Promise.reject('Invalid request');
+      });
+    }
   });
 
   beforeEach(() => {
@@ -154,7 +127,7 @@ describe(commands.PROPERTYBAG_SET, () => {
   });
 
   it('has correct name', () => {
-    assert.equal(command.name.startsWith(commands.PROPERTYBAG_SET), true);
+    assert.equal(command.name.startsWith(commands.FOLDER_RENAME), true);
   });
 
   it('has a description', () => {
@@ -163,7 +136,7 @@ describe(commands.PROPERTYBAG_SET, () => {
 
   it('calls telemetry', (done) => {
     cmdInstance.action = command.action();
-    cmdInstance.action({ options: {}, appCatalogUrl: 'https://contoso-admin.sharepoint.com' }, () => {
+    cmdInstance.action({ options: {}, appCatalogUrl: 'https://contoso.sharepoint.com' }, () => {
       try {
         assert(trackEvent.called);
         done();
@@ -178,7 +151,7 @@ describe(commands.PROPERTYBAG_SET, () => {
     cmdInstance.action = command.action();
     cmdInstance.action({ options: { webUrl: 'https://contoso.sharepoint.com/sites/appcatalog' } }, () => {
       try {
-        assert.equal(telemetry.name, commands.PROPERTYBAG_SET);
+        assert.equal(telemetry.name, commands.FOLDER_RENAME);
         done();
       }
       catch (e) {
@@ -944,7 +917,7 @@ describe(commands.PROPERTYBAG_SET, () => {
     const find = sinon.stub(vorpal, 'find').callsFake(() => cmd);
     cmd.help = command.help();
     cmd.help({}, () => { });
-    assert(find.calledWith(commands.PROPERTYBAG_SET));
+    assert(find.calledWith(commands.FOLDER_RENAME));
   });
 
   it('has help with examples', () => {

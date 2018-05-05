@@ -12,7 +12,7 @@ import { Auth } from '../../../../Auth';
 import { SpoPropertyBagBaseCommand } from './propertybag-base';
 import GlobalOptions from '../../../../GlobalOptions';
 import Utils from '../../../../Utils';
-import { IdentityResponse } from '../../common/IdentityResponse';
+import { IdentityResponse } from "../../SpoClientSvcCommand";
 
 const vorpal: Vorpal = require('../../../../vorpal-init');
 

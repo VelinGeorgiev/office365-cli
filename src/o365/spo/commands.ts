@@ -29,6 +29,7 @@ export default {
   FILE_GET: `${prefix} file get`,
   FILE_LIST: `${prefix} file list`,
   FILE_REMOVE: `${prefix} file remove`,
+  FOLDER_RENAME: `${prefix} folder rename`,
   HUBSITE_CONNECT: `${prefix} hubsite connect`,
   HUBSITE_DATA_GET: `${prefix} hubsite data get`,
   HUBSITE_DISCONNECT: `${prefix} hubsite disconnect`,

@@ -7,7 +7,7 @@ const command: Command = require('./propertybag-list');
 import * as assert from 'assert';
 import * as request from 'request-promise-native';
 import Utils from '../../../../Utils';
-import { IdentityResponse } from '../../common/IdentityResponse';
+import { IdentityResponse } from "../../SpoClientSvcCommand";
 
 describe(commands.PROPERTYBAG_LIST, () => {
   let vorpal: Vorpal;
