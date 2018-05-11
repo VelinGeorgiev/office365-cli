@@ -72,7 +72,7 @@ class SpoPropertyBagRemoveCommand extends SpoPropertyBagBaseCommand {
             cmd.log('');
           }
 
-          return clientSvcCommons.requestObjectIdentity(args.options.webUrl, this.siteAccessToken, this.formDigestValue);
+          return clientSvcCommons.getCurrentWebIdentity(args.options.webUrl, this.siteAccessToken, this.formDigestValue);
         })
         .then((identityResp: IdentityResponse): Promise<IdentityResponse> => {
           if (this.debug) {
@@ -84,7 +84,7 @@ class SpoPropertyBagRemoveCommand extends SpoPropertyBagBaseCommand {
           const opts: Options = args.options;
           if (opts.folder) {
             // get the folder guid instead of the web guid
-            return clientSvcCommons.requestFolderObjectIdentity(identityResp, opts.webUrl, opts.folder, this.siteAccessToken, this.formDigestValue)
+            return clientSvcCommons.getFolderIdentity(identityResp.objectIdentity, opts.webUrl, opts.folder, this.siteAccessToken, this.formDigestValue)
           }
           return new Promise<IdentityResponse>(resolve => { return resolve(identityResp); });
         })

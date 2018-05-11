@@ -73,7 +73,7 @@ class SpoPropertyBagSetCommand extends SpoPropertyBagBaseCommand {
           cmd.log('');
         }
 
-        return clientSvcCommons.requestObjectIdentity(args.options.webUrl, this.siteAccessToken, this.formDigestValue);
+        return clientSvcCommons.getCurrentWebIdentity(args.options.webUrl, this.siteAccessToken, this.formDigestValue);
       })
       .then((identityResp: IdentityResponse): Promise<boolean> => {
         webIdentityResp = identityResp;
@@ -90,7 +90,7 @@ class SpoPropertyBagSetCommand extends SpoPropertyBagBaseCommand {
         const opts: Options = args.options;
         if (opts.folder) {
           // get the folder guid instead of the web guid
-          return clientSvcCommons.requestFolderObjectIdentity(webIdentityResp, opts.webUrl, opts.folder, this.siteAccessToken, this.formDigestValue);
+          return clientSvcCommons.getFolderIdentity(webIdentityResp.objectIdentity, opts.webUrl, opts.folder, this.siteAccessToken, this.formDigestValue);
         }
 
         return new Promise<IdentityResponse>(resolve => { return resolve(webIdentityResp); });

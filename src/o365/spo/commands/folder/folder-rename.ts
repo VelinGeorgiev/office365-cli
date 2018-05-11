@@ -10,7 +10,6 @@ import {
 import SpoCommand from '../../SpoCommand';
 import Utils from '../../../../Utils';
 import { Auth } from '../../../../Auth';
-import * as url from 'url';
 import { ContextInfo, ClientSvcResponse, ClientSvcResponseContents } from '../../spo';
 import { ClientSvcCommons, IdentityResponse } from '../../common/client-svc-commons';
 
@@ -44,122 +43,91 @@ class SpoFolderRenameCommand extends SpoCommand {
   public commandAction(cmd: CommandInstance, args: CommandArgs, cb: () => void): void {
     const resource: string = Auth.getResourceFromUrl(args.options.webUrl);
     const clientSvcCommons: ClientSvcCommons = new ClientSvcCommons(cmd, this.debug);
+    const serverRelativeUrl = Utils.getServerRelativePath(args.options.webUrl, args.options.folderUrl);
     let siteAccessToken: string = '';
     let formDigestValue: string = '';
-    let serverRelativeUrl: string = '';
 
     auth
-    .getAccessToken(resource, auth.service.refreshToken as string, cmd, this.debug)
-    .then((accessToken: string): request.RequestPromise => {
-      siteAccessToken = accessToken;
+      .getAccessToken(resource, auth.service.refreshToken as string, cmd, this.debug)
+      .then((accessToken: string): request.RequestPromise => {
+        siteAccessToken = accessToken;
 
-      if (this.debug) {
-        cmd.log(`Retrieved access token ${accessToken}. Retrieving request digest...`);
-      }
+        if (this.debug) {
+          cmd.log(`Retrieved access token ${accessToken}. Retrieving request digest...`);
+        }
 
-      return this.getRequestDigestForSite(args.options.webUrl, siteAccessToken, cmd, this.debug);
-    })
-    .then((contextResponse: ContextInfo): Promise<IdentityResponse> => {
-      formDigestValue = contextResponse.FormDigestValue;
+        return this.getRequestDigestForSite(args.options.webUrl, siteAccessToken, cmd, this.debug);
+      })
+      .then((contextResponse: ContextInfo): Promise<IdentityResponse> => {
+        formDigestValue = contextResponse.FormDigestValue;
 
-      if (this.debug) {
-        cmd.log('contextResponse:');
-        cmd.log(JSON.stringify(contextResponse));
-        cmd.log('');
-      }
+        if (this.debug) {
+          cmd.log('contextResponse:');
+          cmd.log(JSON.stringify(contextResponse));
+          cmd.log('');
+        }
 
-      return clientSvcCommons.requestObjectIdentity(args.options.webUrl,siteAccessToken, formDigestValue);
-    })
-    .then((webObjectIdentity: IdentityResponse): Promise<IdentityResponse> => {
-      
-      if (this.debug) {
-        cmd.log('IdentityResponse:');
-        cmd.log(JSON.stringify(webObjectIdentity));
-        cmd.log('');
-      }
+        return clientSvcCommons.getCurrentWebIdentity(args.options.webUrl, siteAccessToken, formDigestValue);
+      })
+      .then((webIdentityResp: IdentityResponse): Promise<IdentityResponse> => {
 
-      let webRelativeUrl = this.getWebRelativeUrlFromWebUrl(args.options.webUrl);
-      serverRelativeUrl = `${webRelativeUrl}${this.formatRelativeUrl(args.options.folderUrl)}`;
+        if (this.debug) {
+          cmd.log('IdentityResponse:');
+          cmd.log(JSON.stringify(webIdentityResp));
+          cmd.log('');
+        }
 
-      return clientSvcCommons.requestFolderObjectIdentity(webObjectIdentity, args.options.webUrl, siteAccessToken, formDigestValue);
-    })
-    .then((folderObjectIdentity: IdentityResponse): Promise<void> => {
-      if (this.debug) {
-        cmd.log('IdentityResponse:');
-        cmd.log(JSON.stringify(folderObjectIdentity));
-        cmd.log('');
-      }
+        return clientSvcCommons.getFolderIdentity(webIdentityResp.objectIdentity, args.options.webUrl, serverRelativeUrl, siteAccessToken, formDigestValue);
+      })
+      .then((folderObjectIdentity: IdentityResponse): Promise<void> => {
+        if (this.debug) {
+          cmd.log('IdentityResponse:');
+          cmd.log(JSON.stringify(folderObjectIdentity));
+          cmd.log('');
+        }
 
-      if (this.verbose) {
-        cmd.log(`Renaming folder ${args.options.folderUrl} to ${args.options.name}`);
-      }
+        if (this.verbose) {
+          cmd.log(`Renaming folder ${args.options.folderUrl} to ${args.options.name}`);
+        }
 
-      let webRelativeUrl = this.getWebRelativeUrlFromWebUrl(args.options.webUrl);
-      let serverRelativeUrl: string = `${webRelativeUrl}${this.formatRelativeUrl(args.options.folderUrl)}`;
-      // remove last '/' of url
-      if (serverRelativeUrl.lastIndexOf('/') === serverRelativeUrl.length - 1) {
-        serverRelativeUrl = serverRelativeUrl.substring(0, serverRelativeUrl.length - 1);
-      }
-      const renamedServerRelativeUrl = `${serverRelativeUrl.substring(0, serverRelativeUrl.lastIndexOf('/'))}/${args.options.name}`;
-      cmd.log(renamedServerRelativeUrl);
+        const serverRelativeUrlWithoutOldFolder = serverRelativeUrl.substring(0, serverRelativeUrl.lastIndexOf('/'));
+        const renamedServerRelativeUrl = `${serverRelativeUrlWithoutOldFolder}/${args.options.name}`;
+        cmd.log(renamedServerRelativeUrl);
 
-      const requestOptions: any = {
-        url: `${args.options.webUrl}/_vti_bin/client.svc/ProcessQuery`,
-        headers: Utils.getRequestHeaders({
-          authorization: `Bearer ${siteAccessToken}`,
-          'X-RequestDigest': formDigestValue
-        }),
-        body: `<Request AddExpandoFieldTypeSuffix="true" SchemaVersion="15.0.0.0" LibraryVersion="16.0.0.0" ApplicationName="${config.applicationName}" xmlns="http://schemas.microsoft.com/sharepoint/clientquery/2009"><Actions><Method Name="MoveTo" Id="32" ObjectPathId="26"><Parameters><Parameter Type="String">${renamedServerRelativeUrl}</Parameter></Parameters></Method></Actions><ObjectPaths><Identity Id="26" Name="${folderObjectIdentity.objectIdentity}" /></ObjectPaths></Request>`
-      };
+        const requestOptions: any = {
+          url: `${args.options.webUrl}/_vti_bin/client.svc/ProcessQuery`,
+          headers: Utils.getRequestHeaders({
+            authorization: `Bearer ${siteAccessToken}`,
+            'X-RequestDigest': formDigestValue
+          }),
+          body: `<Request AddExpandoFieldTypeSuffix="true" SchemaVersion="15.0.0.0" LibraryVersion="16.0.0.0" ApplicationName="${config.applicationName}" xmlns="http://schemas.microsoft.com/sharepoint/clientquery/2009"><Actions><Method Name="MoveTo" Id="32" ObjectPathId="26"><Parameters><Parameter Type="String">${renamedServerRelativeUrl}</Parameter></Parameters></Method></Actions><ObjectPaths><Identity Id="26" Name="${folderObjectIdentity.objectIdentity}" /></ObjectPaths></Request>`
+        };
 
-      if (this.debug) {
-        cmd.log('Executing web request...');
-        cmd.log(requestOptions);
-        cmd.log('');
-      }
+        if (this.debug) {
+          cmd.log('Executing web request...');
+          cmd.log(requestOptions);
+          cmd.log('');
+        }
 
-      return new Promise<void>((resolve: any, reject: any): void => {
-        request.post(requestOptions).then((res: any) => {
-  
-          const json: ClientSvcResponse = JSON.parse(res);
-          const contents: ClientSvcResponseContents = json.find(x => { return x['ErrorInfo']; });
-          if (contents && contents.ErrorInfo) {
-            return reject(contents.ErrorInfo.ErrorMessage || 'ClientSvc unknown error');
-          }
-          return resolve();
+        return new Promise<void>((resolve: any, reject: any): void => {
+          request.post(requestOptions).then((res: any) => {
 
-        }, (err: any): void => { reject(err); });
-      });
-    })
-    .then((resp: any): void => {
-      if (this.verbose) {
-        cmd.log('DONE');
-      }
-      cb();
-    }, (err: any): void => this.handleRejectedPromise(err, cmd, cb));
-}
+            const json: ClientSvcResponse = JSON.parse(res);
+            const contents: ClientSvcResponseContents = json.find(x => { return x['ErrorInfo']; });
+            if (contents && contents.ErrorInfo) {
+              return reject(contents.ErrorInfo.ErrorMessage || 'ClientSvc unknown error');
+            }
+            return resolve();
 
-  public formatRelativeUrl(relativeUrl: string): string {
-
-    // add '/' at 0
-    if (relativeUrl.charAt(0) !== '/') {
-      relativeUrl = `/${relativeUrl}`;
-    }
-
-    // remove last '/' of url
-    if (relativeUrl.lastIndexOf('/') === relativeUrl.length - 1) {
-      relativeUrl = relativeUrl.substring(0, relativeUrl.length - 1);
-    }
-
-    return relativeUrl;
-  }
-
-  public getWebRelativeUrlFromWebUrl(webUrl: string): string {
-
-    const tenantUrl = `${url.parse(webUrl).protocol}//${url.parse(webUrl).hostname}`;
-    let webRelativeUrl = webUrl.replace(tenantUrl, '');
-
-    return this.formatRelativeUrl(webRelativeUrl);
+          }, (err: any): void => { reject(err); });
+        });
+      })
+      .then((resp: any): void => {
+        if (this.verbose) {
+          cmd.log('DONE');
+        }
+        cb();
+      }, (err: any): void => this.handleRejectedPromise(err, cmd, cb));
   }
 
   public options(): CommandOption[] {

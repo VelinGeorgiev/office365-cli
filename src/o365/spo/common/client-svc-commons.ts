@@ -8,7 +8,9 @@ export interface IdentityResponse {
   objectIdentity: string;
   serverRelativeUrl: string;
 };
-
+/**
+ * Commonly used Client Svc calls so we do not copy paste like crazy.
+ */
 export class ClientSvcCommons {
 
   public readonly cmd: CommandInstance;
@@ -31,7 +33,7 @@ export class ClientSvcCommons {
    * @param siteAccessToken site access token
    * @param formDigestValue formDigestValue
    */
-  public requestObjectIdentity(webUrl: string, siteAccessToken: string, formDigestValue: string): Promise<IdentityResponse> {
+  public getCurrentWebIdentity(webUrl: string, siteAccessToken: string, formDigestValue: string): Promise<IdentityResponse> {
     const requestOptions: any = {
       url: `${webUrl}/_vti_bin/client.svc/ProcessQuery`,
       headers: Utils.getRequestHeaders({
@@ -67,7 +69,7 @@ export class ClientSvcCommons {
 
   /**
    * Gets EffectiveBasePermissions for web return type is "_ObjectType_\":\"SP.Web\".
-   * @param webObjectIdentity ObjectIdentity. Looks like _ObjectIdentity_=<GUID>|<GUID>:site:<GUID>:web:<GUID>
+   * @param webObjectIdentity ObjectIdentity. Has format _ObjectIdentity_=<GUID>|<GUID>:site:<GUID>:web:<GUID>
    * @param webUrl web url
    * @param siteAccessToken site access token
    * @param formDigestValue formDigestValue
@@ -121,20 +123,20 @@ export class ClientSvcCommons {
   }
 
   /**
-    * Gets folder by server relative url (GetFolderByServerRelativeUrl is REST)
+    * Gets folder by server relative url (GetFolderByServerRelativeUrl in REST)
     * The response data looks like:
     * _ObjectIdentity_=<GUID>|<GUID>:site:<GUID>:web:<GUID>:folder:<GUID>
     * _ObjectType_=SP.Folder
-    * @param identityResp IdentityResponse
+    * @param webObjectIdentity ObjectIdentity. Has format _ObjectIdentity_=<GUID>|<GUID>:site:<GUID>:web:<GUID>
     * @param webUrl web url
+    * @param siteRelativeUrl site relative url e.g. /Shared Documents/Folder1
     * @param siteAccessToken site access token
     * @param formDigestValue formDigestValue
     */
-  public requestFolderObjectIdentity(identityResp: IdentityResponse, webUrl: string, folder: string, siteAccessToken: string, formDigestValue: string): Promise<IdentityResponse> {
-    let serverRelativeUrl: string = folder;
-    if (identityResp.serverRelativeUrl !== '/') {
-      serverRelativeUrl = `${identityResp.serverRelativeUrl}${serverRelativeUrl}`
-    }
+   
+  public getFolderIdentity(webObjectIdentity: string, webUrl: string, siteRelativeUrl: string, siteAccessToken: string, formDigestValue: string): Promise<IdentityResponse> {
+
+    const serverRelativePath: string = Utils.getServerRelativePath(webUrl, siteRelativeUrl);
 
     const requestOptions: any = {
       url: `${webUrl}/_vti_bin/client.svc/ProcessQuery`,
@@ -142,7 +144,7 @@ export class ClientSvcCommons {
         authorization: `Bearer ${siteAccessToken}`,
         'X-RequestDigest': formDigestValue
       }),
-      body: `<Request AddExpandoFieldTypeSuffix="true" SchemaVersion="15.0.0.0" LibraryVersion="16.0.0.0" ApplicationName="${config.applicationName}" xmlns="http://schemas.microsoft.com/sharepoint/clientquery/2009"><Actions><ObjectPath Id="10" ObjectPathId="9" /><ObjectIdentityQuery Id="11" ObjectPathId="9" /><Query Id="12" ObjectPathId="9"><Query SelectAllProperties="false"><Properties><Property Name="Properties" SelectAll="true"><Query SelectAllProperties="false"><Properties /></Query></Property></Properties></Query></Query></Actions><ObjectPaths><Method Id="9" ParentId="5" Name="GetFolderByServerRelativeUrl"><Parameters><Parameter Type="String">${serverRelativeUrl}</Parameter></Parameters></Method><Identity Id="5" Name="${identityResp.objectIdentity}" /></ObjectPaths></Request>`
+      body: `<Request AddExpandoFieldTypeSuffix="true" SchemaVersion="15.0.0.0" LibraryVersion="16.0.0.0" ApplicationName="${config.applicationName}" xmlns="http://schemas.microsoft.com/sharepoint/clientquery/2009"><Actions><ObjectPath Id="10" ObjectPathId="9" /><ObjectIdentityQuery Id="11" ObjectPathId="9" /><Query Id="12" ObjectPathId="9"><Query SelectAllProperties="false"><Properties><Property Name="Properties" SelectAll="true"><Query SelectAllProperties="false"><Properties /></Query></Property></Properties></Query></Query></Actions><ObjectPaths><Method Id="9" ParentId="5" Name="GetFolderByServerRelativeUrl"><Parameters><Parameter Type="String">${serverRelativePath}</Parameter></Parameters></Method><Identity Id="5" Name="${webObjectIdentity}" /></ObjectPaths></Request>`
     };
 
     if (this.debug) {
@@ -170,7 +172,7 @@ export class ClientSvcCommons {
         if (objectIdentity) {
           return resolve({
             objectIdentity: objectIdentity['_ObjectIdentity_'],
-            serverRelativeUrl: serverRelativeUrl
+            serverRelativeUrl: serverRelativePath
           });
         }
 

@@ -115,7 +115,8 @@ describe(commands.PROPERTYBAG_LIST, () => {
 
   afterEach(() => {
     Utils.restore([
-      vorpal.find
+      vorpal.find,
+      request.post
     ]);
   });
 
