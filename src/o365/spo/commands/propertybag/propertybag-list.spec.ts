@@ -7,7 +7,7 @@ const command: Command = require('./propertybag-list');
 import * as assert from 'assert';
 import * as request from 'request-promise-native';
 import Utils from '../../../../Utils';
-import {  IdentityResponse } from '../../common/client-svc-commons';
+import { ClientSvcCommons, IdentityResponse } from '../../common/client-svc-commons';
 
 describe(commands.PROPERTYBAG_LIST, () => {
   let vorpal: Vorpal;
@@ -377,7 +377,7 @@ describe(commands.PROPERTYBAG_LIST, () => {
     auth.site.url = 'https://contoso.sharepoint.com';
     cmdInstance.action = command.action();
 
-    const requestObjectIdentitySpy = sinon.spy((command as any), 'requestObjectIdentity');
+    const requestObjectIdentitySpy = sinon.spy(ClientSvcCommons.prototype, 'getCurrentWebIdentity');
     const options: Object = {
       webUrl: 'https://contoso.sharepoint.com'
     }
@@ -393,8 +393,7 @@ describe(commands.PROPERTYBAG_LIST, () => {
         done(e);
       }
       finally {
-        Utils.restore(request.post);
-        Utils.restore((command as any)['requestObjectIdentity']);
+        Utils.restore([request.post, requestObjectIdentitySpy]);
       }
     });
   });
@@ -408,7 +407,7 @@ describe(commands.PROPERTYBAG_LIST, () => {
     auth.site.url = 'https://contoso.sharepoint.com';
     cmdInstance.action = command.action();
 
-    const requestObjectIdentitySpy = sinon.spy((command as any), 'requestObjectIdentity');
+    const requestObjectIdentitySpy = sinon.spy(ClientSvcCommons.prototype, 'getCurrentWebIdentity');
     const options: Object = {
       webUrl: 'https://contoso.sharepoint.com'
     }
@@ -424,8 +423,7 @@ describe(commands.PROPERTYBAG_LIST, () => {
         done(e);
       }
       finally {
-        Utils.restore(request.post);
-        Utils.restore((command as any)['requestObjectIdentity']);
+        Utils.restore([request.post, requestObjectIdentitySpy]);
       }
     });
   });
