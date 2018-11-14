@@ -15,9 +15,8 @@ Option|Description
 `--help`|output usage information
 `-i, --id [id]`|ID of the app to retrieve information for. Specify the `id` or the `name` but not both
 `-n, --name [name]`|Name of the app to retrieve information for. Specify the `id` or the `name` but not both
-`-u, --appCatalogUrl [appCatalogUrl]`|URL of the tenant app catalog site. If not specified, the CLI will try to resolve it automatically
+`-u, --appCatalogUrl [appCatalogUrl]`|URL of the tenant or site app catalog. It must be specified when the scope is `sitecollection`.
 `-s, --scope [scope]`|Target app catalog. `tenant|sitecollection`. Default `tenant`.
-`--siteUrl [siteUrl]`|The site url where the soultion package is. It must be specified when the scope is `sitecollection`.
 `-o, --output [output]`|Output type. `json|text`. Default `text`
 `--verbose`|Runs command with verbose logging
 `--debug`|Runs command with debug logging
@@ -52,7 +51,7 @@ spo app get --name solution.sppkg --appCatalogUrl https://contoso.sharepoint.com
 Return details about the app with ID _b2307a39-e878-458b-bc90-03bc578531d6_ available in the site collection app catalog of site _https://contoso.sharepoint.com/sites/site1_.
 
 ```sh
-spo app get --id b2307a39-e878-458b-bc90-03bc578531d6 --scope sitecollection --siteUrl https://contoso.sharepoint.com/sites/site1
+spo app get --id b2307a39-e878-458b-bc90-03bc578531d6 --scope sitecollection --appCatalogUrl https://contoso.sharepoint.com/sites/site1/AppCatalog
 ```
 
 ## More information

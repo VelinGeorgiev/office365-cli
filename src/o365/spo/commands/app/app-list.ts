@@ -18,7 +18,7 @@ interface CommandArgs {
 }
 
 interface Options extends GlobalOptions {
-  siteUrl?: string;
+  appCatalogUrl?: string;
   scope?: string;
 }
 
@@ -37,7 +37,7 @@ class AppListCommand extends SpoCommand {
 
   public getTelemetryProperties(args: CommandArgs): any {
     const telemetryProps: any = super.getTelemetryProperties(args);
-    telemetryProps.siteUrl = (!(!args.options.siteUrl)).toString();
+    telemetryProps.appCatalogUrl = (!(!args.options.appCatalogUrl)).toString();
     telemetryProps.scope = (!(!args.options.scope)).toString();
     return telemetryProps;
   }
@@ -55,13 +55,17 @@ class AppListCommand extends SpoCommand {
           cmd.log(`Retrieving apps...`);
         }
 
-        let siteUrl = auth.site.url;
-        if(args.options.siteUrl) {
-          siteUrl = args.options.siteUrl;
+        let appCatalogUrl = auth.site.url;
+        if(args.options.appCatalogUrl) {
+          appCatalogUrl = args.options.appCatalogUrl;
+        }
+
+        if(args.options.scope === 'sitecollection') {
+          appCatalogUrl = appCatalogUrl.toLowerCase().replace('/appcatalog', '');
         }
 
         const requestOptions: any = {
-          url: `${siteUrl}/_api/web/${scope}appcatalog/AvailableApps`,
+          url: `${appCatalogUrl}/_api/web/${scope}appcatalog/AvailableApps`,
           headers: Utils.getRequestHeaders({
             authorization: `Bearer ${accessToken}`,
             accept: 'application/json;odata=nometadata'
@@ -117,8 +121,8 @@ class AppListCommand extends SpoCommand {
         autocomplete: ['tenant', 'sitecollection']
       },
       {
-        option: '-u, --siteUrl [siteUrl]',
-        description: 'Absolute URL of the site to list the apps'
+        option: '-u, --appCatalogUrl [appCatalogUrl]',
+        description: 'Absolute URL of the site to list the apps. It must be specified when the scope is \'sitecollection\''
       }
     ];
 
@@ -136,18 +140,14 @@ class AppListCommand extends SpoCommand {
           return `Scope must be either 'tenant' or 'sitecollection' if specified`;
         }
 
-        if (testScope === 'sitecollection' && !args.options.siteUrl) {
+        if (testScope === 'sitecollection' && !args.options.appCatalogUrl) {
           
-          return `You must specify siteUrl when the scope is sitecollection`;
-        }
+          return `You must specify appCatalogUrl when the scope is sitecollection`;
+        } 
+      } 
 
-        if (args.options.siteUrl) {
-
-          return SpoCommand.isValidSharePointUrl(args.options.siteUrl);
-        }
-      } else if (args.options.siteUrl) {
-        
-          return `siteUrl must be used with scope 'sitecollection'`;
+      if (args.options.appCatalogUrl) {
+        return SpoCommand.isValidSharePointUrl(args.options.appCatalogUrl);
       }
 
       return true;
@@ -176,7 +176,7 @@ class AppListCommand extends SpoCommand {
 
     Return the list of available apps from a site collection app catalog
     of site ${chalk.grey('https://contoso.sharepoint.com/sites/site1')}.
-      ${chalk.grey(config.delimiter)} ${commands.APP_LIST} --scope sitecollection --siteUrl https://contoso.sharepoint.com/sites/site1
+      ${chalk.grey(config.delimiter)} ${commands.APP_LIST} --scope sitecollection --appCatalogUrl https://contoso.sharepoint.com/sites/site1/AppCatalog
 
   More information:
   

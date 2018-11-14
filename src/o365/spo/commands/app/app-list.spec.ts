@@ -194,7 +194,7 @@ describe(commands.APP_LIST, () => {
     auth.site.url = 'https://contoso-admin.sharepoint.com';
     auth.site.tenantId = 'abc';
     cmdInstance.action = command.action();
-    cmdInstance.action({ options: { debug: true, scope: 'sitecollection', siteUrl: 'https://contoso-admin.sharepoint.com' } }, () => {
+    cmdInstance.action({ options: { debug: true, scope: 'sitecollection', appCatalogUrl: 'https://contoso-admin.sharepoint.com' } }, () => {
       try {
         assert(cmdInstanceLogSpy.calledWith([
           {
@@ -350,7 +350,7 @@ describe(commands.APP_LIST, () => {
     auth.site.url = 'https://contoso-admin.sharepoint.com';
     auth.site.tenantId = 'abc';
     cmdInstance.action = command.action();
-    cmdInstance.action({ options: { debug: false, scope: 'sitecollection', siteUrl: 'https://contoso-admin.sharepoint.com' } }, () => {
+    cmdInstance.action({ options: { debug: false, scope: 'sitecollection', appCatalogUrl: 'https://contoso-admin.sharepoint.com' } }, () => {
       try {
         assert.equal(log.length, 0);
         done();
@@ -433,30 +433,25 @@ describe(commands.APP_LIST, () => {
     assert.equal(actual, true);
   });
 
-  it('fails validation when siteUrl is not a valid url', () => {
-    const actual = (command.validate() as CommandValidate)({ options: { scope: 'sitecollection', siteUrl: 'abc' } });
+  it('fails validation when appCatalogUrl is not a valid url', () => {
+    const actual = (command.validate() as CommandValidate)({ options: { scope: 'sitecollection', appCatalogUrl: 'abc' } });
     assert.notEqual(actual, true);
   });
 
-  it('fails validation when siteUrl and no scope', () => {
-    const actual = (command.validate() as CommandValidate)({ options: { siteUrl: 'https://contoso-admin.sharepoint.com' } });
-    assert.notEqual(actual, true);
-  });
-
-  it('should fail when \'sitecollection\' scope, but no siteUrl specified', () => {
+  it('should fail when \'sitecollection\' scope, but no appCatalogUrl specified', () => {
 
     const actual = (command.validate() as CommandValidate)({ options: { name: 'solution', filePath: 'abc', scope: 'sitecollection' } });
     assert.notEqual(actual, true);
   });
 
-  it('should fail when \'sitecollection\' scope, but  bad siteUrl format specified', () => {
+  it('should fail when \'sitecollection\' scope, but  bad appCatalogUrl format specified', () => {
 
-    const actual = (command.validate() as CommandValidate)({ options: { name: 'solution', filePath: 'abc', scope: 'sitecollection', siteUrl:'contoso.sharepoint.com'  } });
+    const actual = (command.validate() as CommandValidate)({ options: { name: 'solution', filePath: 'abc', scope: 'sitecollection', appCatalogUrl:'contoso.sharepoint.com'  } });
     assert.notEqual(actual, true);
   });
 
-  it('passes validation when the scope is specified with \'sitecollection\' and siteUrl present', () => {
-    const actual = (command.validate() as CommandValidate)({ options: { scope: 'sitecollection', siteUrl: 'https://contoso-admin.sharepoint.com' } });
+  it('passes validation when the scope is specified with \'sitecollection\' and appCatalogUrl present', () => {
+    const actual = (command.validate() as CommandValidate)({ options: { scope: 'sitecollection', appCatalogUrl: 'https://contoso-admin.sharepoint.com' } });
     assert.equal(actual, true);
   });
 

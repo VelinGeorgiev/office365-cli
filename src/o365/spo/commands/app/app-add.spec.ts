@@ -215,7 +215,7 @@ describe(commands.APP_ADD, () => {
     auth.site.connected = true;
     auth.site.url = 'https://contoso.sharepoint.com';
     cmdInstance.action = command.action();
-    cmdInstance.action({ options: { debug: true, filePath: 'spfx.sppkg', scope: 'sitecollection' } }, () => {
+    cmdInstance.action({ options: { debug: true, filePath: 'spfx.sppkg', scope: 'sitecollection', appCatalogUrl: 'https://contoso.sharepoint.com/AppCatalog' } }, () => {
       let correctRequestIssued = false;
       requests.forEach(r => {
         if (r.url.indexOf(`/_api/web/sitecollectionappcatalog/Add(overwrite=false, url='spfx.sppkg')`) > -1 &&
@@ -559,7 +559,7 @@ describe(commands.APP_ADD, () => {
     assert.equal(actual, true);
   });
 
-  it('passes validation on valid \'Tenant\' scope', () => {
+  it('passes validation on valid \'tenant\' scope', () => {
     const stats: fs.Stats = new fs.Stats();
     sinon.stub(stats, 'isDirectory').callsFake(() => false);
     sinon.stub(fs, 'existsSync').callsFake(() => true);
@@ -579,7 +579,7 @@ describe(commands.APP_ADD, () => {
     sinon.stub(fs, 'existsSync').callsFake(() => true);
     sinon.stub(fs, 'lstatSync').callsFake(() => stats);
 
-    const actual = (command.validate() as CommandValidate)({ options: { scope: 'SiteCollection', siteUrl:'https://contoso.sharepoint.com', filePath: 'abc' } });
+    const actual = (command.validate() as CommandValidate)({ options: { scope: 'SiteCollection', appCatalogUrl:'https://contoso.sharepoint.com', filePath: 'abc' } });
     Utils.restore([
       fs.existsSync,
       fs.lstatSync
@@ -847,7 +847,7 @@ describe(commands.APP_ADD, () => {
     assert.equal(actual, true);
   });
 
-  it('should fail when \'sitecollection\' scope, but no siteUrl specified', () => {
+  it('should fail when \'sitecollection\' scope, but no appCatalogUrl specified', () => {
     const stats: fs.Stats = new fs.Stats();
     sinon.stub(stats, 'isDirectory').callsFake(() => false);
     sinon.stub(fs, 'existsSync').callsFake(() => true);
@@ -862,43 +862,13 @@ describe(commands.APP_ADD, () => {
     assert.notEqual(actual, true);
   });
 
-  it('should fail when \'tenant\' scope, but also siteUrl specified', () => {
+  it('should fail when \'sitecollection\' scope, but  bad appCatalogUrl format specified', () => {
     const stats: fs.Stats = new fs.Stats();
     sinon.stub(stats, 'isDirectory').callsFake(() => false);
     sinon.stub(fs, 'existsSync').callsFake(() => true);
     sinon.stub(fs, 'lstatSync').callsFake(() => stats);
 
-    const actual = (command.validate() as CommandValidate)({ options: { filePath: 'abc', scope: 'tenant', siteUrl:'https://contoso.sharepoint.com'  } });
-
-    Utils.restore([
-      fs.existsSync,
-      fs.lstatSync
-    ]);
-    assert.notEqual(actual, true);
-  });
-
-  it('should fail when \'sitecollection\' scope, but  bad siteUrl format specified', () => {
-    const stats: fs.Stats = new fs.Stats();
-    sinon.stub(stats, 'isDirectory').callsFake(() => false);
-    sinon.stub(fs, 'existsSync').callsFake(() => true);
-    sinon.stub(fs, 'lstatSync').callsFake(() => stats);
-
-    const actual = (command.validate() as CommandValidate)({ options: { filePath: 'abc', scope: 'sitecollection', siteUrl:'contoso.sharepoint.com'  } });
-
-    Utils.restore([
-      fs.existsSync,
-      fs.lstatSync
-    ]);
-    assert.notEqual(actual, true);
-  });
-
-  it('should fail when no scope, but siteUrl specified', () => {
-    const stats: fs.Stats = new fs.Stats();
-    sinon.stub(stats, 'isDirectory').callsFake(() => false);
-    sinon.stub(fs, 'existsSync').callsFake(() => true);
-    sinon.stub(fs, 'lstatSync').callsFake(() => stats);
-
-    const actual = (command.validate() as CommandValidate)({ options: { filePath: 'abc', siteUrl:'https://contoso.sharepoint.com'  } });
+    const actual = (command.validate() as CommandValidate)({ options: { filePath: 'abc', scope: 'sitecollection', appCatalogUrl:'contoso.sharepoint.com'  } });
 
     Utils.restore([
       fs.existsSync,

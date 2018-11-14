@@ -328,7 +328,7 @@ describe(commands.APP_REMOVE, () => {
     auth.site.connected = true;
     auth.site.url = 'https://contoso.sharepoint.com';
     cmdInstance.action = command.action();
-    cmdInstance.action({ options: { debug: false, scope: 'sitecollection', id: 'b2307a39-e878-458b-bc90-03bc578531d6', siteUrl: 'https://contoso.sharepoint.com', confirm: true } }, () => {
+    cmdInstance.action({ options: { debug: false, scope: 'sitecollection', id: 'b2307a39-e878-458b-bc90-03bc578531d6', appCatalogUrl: 'https://contoso.sharepoint.com', confirm: true } }, () => {
       let correctRequestIssued = false;
       requests.forEach(r => {
         if (r.url.indexOf(`/_api/web/sitecollectionappcatalog/AvailableApps/GetById('b2307a39-e878-458b-bc90-03bc578531d6')/remove`) > -1 &&
@@ -932,32 +932,15 @@ describe(commands.APP_REMOVE, () => {
     assert.notEqual(actual, true);
   });
 
-  it('should fail when \'sitecollection\' scope, but no siteUrl specified', () => {
+  it('should fail when \'sitecollection\' scope, but no appCatalogUrl specified', () => {
 
     const actual = (command.validate() as CommandValidate)({ options: { id: 'dd20afdf-d7fd-4662-a443-b69e65a72bd4', filePath: 'abc', scope: 'sitecollection' } });
     assert.notEqual(actual, true);
   });
 
-  it('should fail when \'tenant\' scope, but also siteUrl specified', () => {
-    const actual = (command.validate() as CommandValidate)({ options: { id: 'dd20afdf-d7fd-4662-a443-b69e65a72bd4', filePath: 'abc', scope: 'tenant', siteUrl:'https://contoso.sharepoint.com'  } });
-    assert.notEqual(actual, true);
-  });
+  it('should fail when \'sitecollection\' scope, but  bad appCatalogUrl format specified', () => {
 
-  it('should fail when \'sitecollection\' scope, but  bad siteUrl format specified', () => {
-
-    const actual = (command.validate() as CommandValidate)({ options: { id: 'dd20afdf-d7fd-4662-a443-b69e65a72bd4', filePath: 'abc', scope: 'sitecollection', siteUrl:'contoso.sharepoint.com'  } });
-    assert.notEqual(actual, true);
-  });
-
-  it('should fail when no scope, but siteUrl specified', () => {
-
-    const actual = (command.validate() as CommandValidate)({ options: { id: 'dd20afdf-d7fd-4662-a443-b69e65a72bd4', filePath: 'abc', siteUrl:'https://contoso.sharepoint.com'  } });
-    assert.notEqual(actual, true);
-  });
-
-  it('should fail when \'sitecollection\' scope, but appCatalogUrl specified instead of siteUrl', () => {
-
-    const actual = (command.validate() as CommandValidate)({ options: { id: 'dd20afdf-d7fd-4662-a443-b69e65a72bd4', filePath: 'abc', appCatalogUrl:'https://contoso.sharepoint.com', scope: 'sitecollection'  } });
+    const actual = (command.validate() as CommandValidate)({ options: { id: 'dd20afdf-d7fd-4662-a443-b69e65a72bd4', filePath: 'abc', scope: 'sitecollection', appCatalogUrl:'contoso.sharepoint.com'  } });
     assert.notEqual(actual, true);
   });
 
@@ -982,7 +965,7 @@ describe(commands.APP_REMOVE, () => {
   });
 
   it('passes validation when the scope is specified with \'sitecollection\'', () => {
-    const actual = (command.validate() as CommandValidate)({ options: { id: 'dd20afdf-d7fd-4662-a443-b69e65a72bd4', scope: 'sitecollection', siteUrl: 'https://contoso.sharepoint.com' } });
+    const actual = (command.validate() as CommandValidate)({ options: { id: 'dd20afdf-d7fd-4662-a443-b69e65a72bd4', scope: 'sitecollection', appCatalogUrl: 'https://contoso.sharepoint.com' } });
     assert.equal(actual, true);
   });
 

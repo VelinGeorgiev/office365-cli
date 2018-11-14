@@ -360,7 +360,7 @@ describe(commands.APP_GET, () => {
     auth.site.url = 'https://contoso.sharepoint.com/sites/site1';
     auth.site.tenantId = 'abc';
     cmdInstance.action = command.action();
-    cmdInstance.action({ options: { debug: false, name: 'solution.sppkg', scope: 'sitecollection', siteUrl: 'https://contoso.sharepoint.com/sites/site1' } }, () => {
+    cmdInstance.action({ options: { debug: false, name: 'solution.sppkg', scope: 'sitecollection', appCatalogUrl: 'https://contoso.sharepoint.com/sites/site1' } }, () => {
       try {
         assert(cmdInstanceLogSpy.calledWith({
           ID: 'b2307a39-e878-458b-bc90-03bc578531d6',
@@ -543,7 +543,7 @@ describe(commands.APP_GET, () => {
     cmdInstance.prompt = (options: any, cb: (result: { appCatalogUrl: string,   }) => void) => {
       cb({ appCatalogUrl: '' });
     };
-    cmdInstance.action({ options: { debug: false, name: 'solution.sppkg', scope: 'sitecollection', siteUrl: 'https://contoso.sharepoint.com' } }, (err?: any) => {
+    cmdInstance.action({ options: { debug: false, name: 'solution.sppkg', scope: 'sitecollection', appCatalogUrl: 'https://contoso.sharepoint.com' } }, (err?: any) => {
       try {
         assert.equal(JSON.stringify(err), JSON.stringify(new CommandError('An error has occurred')));
         done();
@@ -803,7 +803,7 @@ describe(commands.APP_GET, () => {
   });
 
   it('fails validation when invalid scope is specified', () => {
-    const actual = (command.validate() as CommandValidate)({ options: { id: '123', siteUrl: 'https://contoso.sharepoint.com', scope: 'foo' } });
+    const actual = (command.validate() as CommandValidate)({ options: { id: '123', appCatalogUrl: 'https://contoso.sharepoint.com', scope: 'foo' } });
     assert.notEqual(actual, true);
   });
 
@@ -828,36 +828,19 @@ describe(commands.APP_GET, () => {
   });
 
   it('fails validation when invalid scope is specified', () => {
-    const actual = (command.validate() as CommandValidate)({ options: { id: 'dd20afdf-d7fd-4662-a443-b69e65a72bd4', siteUrl: 'https://contoso.sharepoint.com', scope: 'foo' } });
+    const actual = (command.validate() as CommandValidate)({ options: { id: 'dd20afdf-d7fd-4662-a443-b69e65a72bd4', appCatalogUrl: 'https://contoso.sharepoint.com', scope: 'foo' } });
     assert.notEqual(actual, true);
   });
 
-  it('should fail when \'sitecollection\' scope, but no siteUrl specified', () => {
+  it('should fail when \'sitecollection\' scope, but no appCatalogUrl specified', () => {
 
     const actual = (command.validate() as CommandValidate)({ options: { id: 'dd20afdf-d7fd-4662-a443-b69e65a72bd4', filePath: 'abc', scope: 'sitecollection' } });
     assert.notEqual(actual, true);
   });
 
-  it('should fail when \'tenant\' scope, but also siteUrl specified', () => {
-    const actual = (command.validate() as CommandValidate)({ options: { id: 'dd20afdf-d7fd-4662-a443-b69e65a72bd4', filePath: 'abc', scope: 'tenant', siteUrl:'https://contoso.sharepoint.com'  } });
-    assert.notEqual(actual, true);
-  });
+  it('should fail when \'sitecollection\' scope, but  bad appCatalogUrl format specified', () => {
 
-  it('should fail when \'sitecollection\' scope, but  bad siteUrl format specified', () => {
-
-    const actual = (command.validate() as CommandValidate)({ options: { id: 'dd20afdf-d7fd-4662-a443-b69e65a72bd4', filePath: 'abc', scope: 'sitecollection', siteUrl:'contoso.sharepoint.com'  } });
-    assert.notEqual(actual, true);
-  });
-
-  it('should fail when no scope, but siteUrl specified', () => {
-
-    const actual = (command.validate() as CommandValidate)({ options: { id: 'dd20afdf-d7fd-4662-a443-b69e65a72bd4', filePath: 'abc', siteUrl:'https://contoso.sharepoint.com'  } });
-    assert.notEqual(actual, true);
-  });
-
-  it('should fail when \'sitecollection\' scope, but appCatalogUrl specified instead of siteUrl', () => {
-
-    const actual = (command.validate() as CommandValidate)({ options: { id: 'dd20afdf-d7fd-4662-a443-b69e65a72bd4', filePath: 'abc', appCatalogUrl:'https://contoso.sharepoint.com', scope: 'sitecollection'  } });
+    const actual = (command.validate() as CommandValidate)({ options: { id: 'dd20afdf-d7fd-4662-a443-b69e65a72bd4', filePath: 'abc', scope: 'sitecollection', appCatalogUrl:'contoso.sharepoint.com'  } });
     assert.notEqual(actual, true);
   });
 
@@ -887,7 +870,7 @@ describe(commands.APP_GET, () => {
   });
 
   it('passes validation when the scope is specified with \'sitecollection\'', () => {
-    const actual = (command.validate() as CommandValidate)({ options: { id: 'dd20afdf-d7fd-4662-a443-b69e65a72bd4', siteUrl: 'https://contoso.sharepoint.com', scope: 'sitecollection' } });
+    const actual = (command.validate() as CommandValidate)({ options: { id: 'dd20afdf-d7fd-4662-a443-b69e65a72bd4', appCatalogUrl: 'https://contoso.sharepoint.com', scope: 'sitecollection' } });
     assert.equal(actual, true);
   });
 
