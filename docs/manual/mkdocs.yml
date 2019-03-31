@@ -255,6 +255,7 @@ nav:
         - teams app remove: 'cmd/graph/teams/teams-app-remove.md'
         - teams app uninstall: 'cmd/graph/teams/teams-app-uninstall.md'
         - teams app update: 'cmd/graph/teams/teams-app-update.md'
+        - teams archive: 'cmd/graph/teams/teams-archive.md'
         - teams channel add: 'cmd/graph/teams/teams-channel-add.md'
         - teams channel get: 'cmd/graph/teams/teams-channel-get.md'
         - teams channel list: 'cmd/graph/teams/teams-channel-list.md'
