@@ -8,6 +8,7 @@ import Command from './Command';
 import appInsights from './appInsights';
 import Utils from './Utils';
 import { autocomplete } from './autocomplete';
+import { listCommands } from './list-commands';
 
 const packageJSON = require('../package.json');
 const vorpal: Vorpal = require('./vorpal-init'),
@@ -101,6 +102,21 @@ fs.realpath(__dirname, (err: NodeJS.ErrnoException, resolvedPath: string): void 
     loadAllCommands(resolvedPath);
     autocomplete.generateShCompletion(vorpal);
     autocomplete.setupShCompletion();
+    process.exit();
+  }
+  if (process.argv.indexOf('--listcommands:yaml') > -1) {
+    loadAllCommands(resolvedPath);
+    listCommands.generateYamlList(vorpal);
+    process.exit();
+  }
+  if (process.argv.indexOf('--listshortcuts:md') > -1) {
+    loadAllCommands(resolvedPath);
+    listCommands.generateShortcutsMarkdownList(vorpal);
+    process.exit();
+  }
+  if (process.argv.indexOf('--listshortcuts:yaml') > -1) {
+    loadAllCommands(resolvedPath);
+    listCommands.generateShortcutsYamlList(vorpal);
     process.exit();
   }
   if (process.argv.indexOf('--reconsent') > -1) {
