@@ -1,39 +1,42 @@
 help:
 exit:
 quit:
-aad login:
+o365 login:
   - '-t, --authType [authType]'
   - '-u, --userName [userName]'
   - '-p, --password [password]'
   - '-c, --certificateFile [certificateFile]'
   - '--thumbprint [thumbprint]'
-aad connect:
+o365 connect:
   - '-t, --authType [authType]'
   - '-u, --userName [userName]'
   - '-p, --password [password]'
   - '-c, --certificateFile [certificateFile]'
   - '--thumbprint [thumbprint]'
-aad logout:
-aad disconnect:
-aad oauth2grant add:
+o365 logout:
+o365 disconnect:
+o365 oauth2grant add:
   - '-i, --clientId <clientId>'
   - '-r, --resourceId <resourceId>'
   - '-s, --scope <scope>'
-aad oauth2grant list:
+o365 oauth2grant list:
   - '-i, --clientId <clientId>'
-aad oauth2grant remove:
+o365 oauth2grant remove:
   - '-i, --grantId <grantId>'
-aad oauth2grant set:
+o365 oauth2grant set:
   - '-i, --grantId <grantId>'
   - '-s, --scope <scope>'
 aad sp get:
   - '-i, --appId [appId]'
   - '-n, --displayName [displayName]'
-aad status:
-azmgmt flow environment get:
+o365 status:
+flow environment get:
   - '-n, --name <name>'
-azmgmt flow environment list:
-azmgmt flow export:
+flow env get:
+  - '-n, --name <name>'
+flow environment list:
+flow env list:
+flow export:
   - '-i, --id <id>'
   - '-e, --environment <environment>'
   - '-n, --packageDisplayName [packageDisplayName]'
@@ -42,64 +45,35 @@ azmgmt flow export:
   - '-s, --packageSourceEnvironment [packageSourceEnvironment]'
   - '-f, --format [format]'
   - '-p, --path [path]'
-azmgmt flow get:
+flow get:
   - '-n, --name <name>'
   - '-e, --environment <environment>'
   - '--asAdmin'
-azmgmt flow list:
+flow list:
   - '-e, --environment <environment>'
   - '--asAdmin'
-azmgmt flow run get:
+flow run get:
   - '-n, --name <name>'
   - '-f, --flow <flow>'
   - '-e, --environment <environment>'
-azmgmt flow run list:
+flow run list:
   - '-f, --flow <flow>'
   - '-e, --environment <environment>'
-azmgmt login:
-  - '-t, --authType [authType]'
-  - '-u, --userName [userName]'
-  - '-p, --password [password]'
-  - '-c, --certificateFile [certificateFile]'
-  - '--thumbprint [thumbprint]'
-azmgmt connect:
-  - '-t, --authType [authType]'
-  - '-u, --userName [userName]'
-  - '-p, --password [password]'
-  - '-c, --certificateFile [certificateFile]'
-  - '--thumbprint [thumbprint]'
-azmgmt logout:
-azmgmt disconnect:
-azmgmt status:
-graph groupsetting add:
+group setting add:
   - '-i, --templateId <templateId>'
-graph groupsetting get:
+group setting get:
   - '-i, --id <id>'
-graph groupsetting list:
-graph groupsetting remove:
+group setting list:
+group setting remove:
   - '-i, --id <id>'
   - '--confirm'
-graph groupsetting set:
+group setting set:
   - '-i, --id <id>'
-graph groupsettingtemplate get:
+group template get:
   - '-i, --id [id]'
   - '-n, --displayName [displayName]'
-graph groupsettingtemplate list:
-graph login:
-  - '-t, --authType [authType]'
-  - '-u, --userName [userName]'
-  - '-p, --password [password]'
-  - '-c, --certificateFile [certificateFile]'
-  - '--thumbprint [thumbprint]'
-graph connect:
-  - '-t, --authType [authType]'
-  - '-u, --userName [userName]'
-  - '-p, --password [password]'
-  - '-c, --certificateFile [certificateFile]'
-  - '--thumbprint [thumbprint]'
-graph logout:
-graph disconnect:
-graph o365group add:
+group template list:
+group add:
   - '-n, --displayName <displayName>'
   - '-d, --description <description>'
   - '-m, --mailNickname <mailNickname>'
@@ -107,20 +81,20 @@ graph o365group add:
   - '--members [members]'
   - '--isPrivate [isPrivate]'
   - '-l, --logoPath [logoPath]'
-graph o365group get:
+group get:
   - '-i, --id <id>'
   - '--includeSiteUrl'
-graph o365group list:
+group list:
   - '-d, --displayName [displayName]'
   - '-m, --mailNickname [displayName]'
   - '--includeSiteUrl'
   - '--deleted'
-graph o365group remove:
+group remove:
   - '-i, --id <id>'
   - '--confirm'
-graph o365group restore:
+group restore:
   - '-i, --id <id>'
-graph o365group set:
+group set:
   - '-i, --id <id>'
   - '-n, --displayName [displayName]'
   - '-d, --description [description]'
@@ -128,12 +102,12 @@ graph o365group set:
   - '--members [members]'
   - '--isPrivate [isPrivate]'
   - '-l, --logoPath [logoPath]'
-graph o365group user add:
+group user add:
   - '-n, --userName <userName>'
   - '-i, --groupId [groupId]'
   - '--teamId [teamId]'
   - '-r, --role [role]'
-graph teams user add:
+teams user add:
   - '-n, --userName <userName>'
   - '-i, --groupId [groupId]'
   - '--teamId [teamId]'
@@ -144,118 +118,117 @@ graph schemaextension add:
   - '--owner <owner>'
   - '-t, --targetTypes <targetTypes>'
   - '-p, --properties <properties>'
-graph siteclassification disable:
+site classification disable:
   - '--confirm'
-graph siteclassification enable:
+site classification enable:
   - '-c, --classifications <classifications>'
   - '-d, --defaultClassification <defaultClassification>'
   - '-u, --usageGuidelinesUrl [usageGuidelinesUrl]'
   - '-g, --guestUsageGuidelinesUrl [guestUsageGuidelinesUrl]'
-graph siteclassification get:
-graph siteclassification set:
+site classification get:
+site classification set:
   - '-c, --classifications [classifications]'
   - '-d, --defaultClassification [defaultClassification]'
   - '-u, --usageGuidelinesUrl [usageGuidelinesUrl]'
   - '-g, --guestUsageGuidelinesUrl [guestUsageGuidelinesUrl]'
-graph status:
-graph teams add:
+teams add:
   - '-n, --name [name]'
   - '-d, --description [description]'
   - '-i, --groupId [groupId]'
-graph teams app install:
+teams app install:
   - '--appId <appId>'
   - '--teamId <teamId>'
-graph teams app list:
+teams app list:
   - '-a, --all'
   - '-i, --teamId [teamId]'
-graph teams app publish:
+teams app publish:
   - '-p, --filePath <filePath>'
-graph teams app remove:
+teams app remove:
   - '-i, --id <id>'
   - '--confirm'
-graph teams app uninstall:
+teams app uninstall:
   - '--appId <appId>'
   - '--teamId <teamId>'
   - '--confirm'
-graph teams app update:
+teams app update:
   - '-i, --id <id>'
   - '-p, --filePath <filePath>'
-graph teams channel add:
+teams channel add:
   - '-i, --teamId <teamId>'
   - '-n, --name <name>'
   - '-d, --description [description]'
-graph teams channel get:
+teams channel get:
   - '-i, --teamId <teamId>'
   - '-c, --channelId <channelId>'
-graph teams channel list:
+teams channel list:
   - '-i, --teamId <teamId>'
-graph teams channel set:
+teams channel set:
   - '-i, --teamId <teamId>'
   - '--channelName <channelName>'
   - '--newChannelName [newChannelName]'
   - '--description [description]'
-graph teams funsettings list:
+teams funsettings list:
   - '-i, --teamId <teamId>'
-graph teams guestsettings list:
+teams guestsettings list:
   - '-i, --teamId <teamId>'
-graph teams guestsettings set:
+teams guestsettings set:
   - '-i, --teamId <teamId>'
   - '--allowCreateUpdateChannels [allowCreateUpdateChannels]'
   - '--allowDeleteChannels [allowDeleteChannels]'
-graph teams list:
+teams list:
   - '-j, --joined'
-graph teams membersettings list:
+teams membersettings list:
   - '-i, --teamId <teamId>'
-graph teams membersettings set:
+teams membersettings set:
   - '-i, --teamId <teamId>'
   - '--allowAddRemoveApps [allowAddRemoveApps]'
   - '--allowCreateUpdateChannels [allowCreateUpdateChannels]'
   - '--allowCreateUpdateRemoveConnectors [allowCreateUpdateRemoveConnectors]'
   - '--allowCreateUpdateRemoveTabs [allowCreateUpdateRemoveTabs]'
   - '--allowDeleteChannels [allowDeleteChannels]'
-graph teams message get:
+teams message get:
   - '-i, --teamId <teamId>'
   - '-c, --channelId <channelId>'
   - '-m, --messageId <messageId>'
-graph teams channel message get:
+teams channel message get:
   - '-i, --teamId <teamId>'
   - '-c, --channelId <channelId>'
   - '-m, --messageId <messageId>'
-graph teams message list:
+teams message list:
   - '-i, --teamId <teamId>'
   - '-c, --channelId <channelId>'
-graph teams messagingsettings list:
+teams messagingsettings list:
   - '-i, --teamId <teamId>'
-graph teams messagingsettings set:
+teams messagingsettings set:
   - '-i, --teamId <teamId>'
   - '--allowUserEditMessages [allowUserEditMessages]'
   - '--allowUserDeleteMessages [allowUserDeleteMessages]'
   - '--allowOwnerDeleteMessages [allowOwnerDeleteMessages]'
   - '--allowTeamMentions [allowTeamMentions]'
   - '--allowChannelMentions [allowChannelMentions]'
-graph teams tab list:
+teams tab list:
   - '-i, --teamId <teamId>'
   - '-c, --channelId <channelId>'
-graph teams unarchive:
+teams unarchive:
   - '-i, --teamId <teamId>'
-graph teams user list:
+teams user list:
   - '-i, --teamId <teamId>'
   - '-r, --role [type]'
-graph teams user remove:
+teams user remove:
   - '-i, --teamId <teamId>'
   - '-n, --userName <userName>'
   - '--confirm'
-graph teams user set:
+teams user set:
   - '-i, --teamId <teamId>'
   - '-n, --userName <userName>'
   - '-r, --role <role>'
-graph user get:
+user get:
   - '-i, --id [id]'
   - '-n, --userName [userName]'
   - '-p, --properties [properties]'
-graph user list:
+user list:
   - '-p, --properties [properties]'
-graph user sendmail:
+user sendmail:
   - '-s, --subject <subject>'
   - '-t, --to <to>'
   - '--bodyContents [bodyContents]'
@@ -840,20 +813,6 @@ spo listitem set:
   - '-t, --listTitle [listTitle]'
   - '-c, --contentType [contentType]'
   - '-s, --systemUpdate'
-spo login:
-  - '-t, --authType [authType]'
-  - '-u, --userName [userName]'
-  - '-p, --password [password]'
-  - '-c, --certificateFile [certificateFile]'
-  - '--thumbprint [thumbprint]'
-spo connect:
-  - '-t, --authType [authType]'
-  - '-u, --userName [userName]'
-  - '-p, --password [password]'
-  - '-c, --certificateFile [certificateFile]'
-  - '--thumbprint [thumbprint]'
-spo logout:
-spo disconnect:
 spo navigation node add:
   - '-u, --webUrl <webUrl>'
   - '-l, --location <location>'
@@ -1170,7 +1129,6 @@ spo sitescript set:
   - '-d, --description [description]'
   - '-v, --version [version]'
   - '-c, --content [content]'
-spo status:
 spo storageentity get:
   - '-k, --key <key>'
 spo storageentity list:
@@ -1338,6 +1296,8 @@ spo web add:
   - '--breakInheritance'
   - '--inheritNavigation'
 spo web clientsidewebpart list:
+  - '-u, --webUrl <webUrl>'
+spo web webpart list:
   - '-u, --webUrl <webUrl>'
 spo web get:
   - '-u, --webUrl <webUrl>'
