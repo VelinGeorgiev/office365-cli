@@ -1,270 +1,218 @@
 help:
 exit:
 quit:
-aad login:
-aad connect:
-aad logout:
-aad disconnect:
+login:
+logout:
 aad oauth2grant add:
-aad oauth2grant list:
+aad oauth2grant get:
 aad oauth2grant remove:
 aad oauth2grant set:
 aad sp get:
-aad status:
-azmgmt flow environment get:
-azmgmt flow environment list:
-azmgmt flow export:
-azmgmt flow get:
-azmgmt flow list:
-azmgmt flow run get:
-azmgmt flow run list:
-azmgmt login:
-azmgmt connect:
-azmgmt logout:
-azmgmt disconnect:
-azmgmt status:
-graph groupsetting add:
-graph groupsetting get:
-graph groupsetting list:
-graph groupsetting remove:
-graph groupsetting set:
-graph groupsettingtemplate get:
-graph groupsettingtemplate list:
-graph login:
-graph connect:
-graph logout:
-graph disconnect:
-graph o365group add:
-graph o365group get:
-graph o365group list:
-graph o365group remove:
-graph o365group restore:
-graph o365group set:
-graph o365group user add:
-graph teams user add:
+flows flow environment get:
+flows flow export:
+flows flow get:
+flows flow run get:
+o365groups groupsetting add:
+o365groups groupsetting get:
+o365groups groupsetting remove:
+o365groups groupsetting set:
+o365groups groupsettingtemplate get:
+o365groups group add:
+o365groups group get:
+o365groups group remove:
+o365groups group restore:
+o365groups group set:
+o365groups group user add:
+teams user add:
 graph schemaextension add:
-graph siteclassification disable:
-graph siteclassification enable:
-graph siteclassification get:
-graph siteclassification set:
-graph status:
-graph teams add:
-graph teams app install:
-graph teams app list:
-graph teams app publish:
-graph teams app remove:
-graph teams app uninstall:
-graph teams app update:
-graph teams channel add:
-graph teams channel get:
-graph teams channel list:
-graph teams channel set:
-graph teams funsettings list:
-graph teams guestsettings list:
-graph teams guestsettings set:
-graph teams list:
-graph teams membersettings list:
-graph teams membersettings set:
-graph teams message get:
-graph teams channel message get:
-graph teams message list:
-graph teams messagingsettings list:
-graph teams messagingsettings set:
-graph teams tab list:
-graph teams unarchive:
-graph teams user list:
-graph teams user remove:
-graph teams user set:
-graph user get:
-graph user list:
-graph user sendmail:
+aad siteclassification disable:
+aad siteclassification enable:
+aad siteclassification get:
+aad siteclassification set:
+teams team add:
+teams team get (instead of 'teams team list'):
+teams app install:
+teams app get:
+teams app publish:
+teams app remove:
+teams app uninstall:
+teams app update:
+teams channel add:
+teams channel get:
+teams channel set:
+teams funsettings get:
+teams guestsettings get:
+teams guestsettings set:
+teams membersettings get:
+teams membersettings set:
+teams message get:
+teams channel message get:
+teams messagingsettings get:
+teams messagingsettings set:
+teams tab get:
+teams unarchive:
+teams user get:
+teams user remove:
+teams user set:
+users get:
+users sendmail:
 spfx project upgrade:
-spo app add:
-spo app deploy:
-spo app get:
-spo app install:
-spo app list:
-spo app remove:
-spo app retract:
-spo app uninstall:
-spo app upgrade:
-spo cdn get:
-spo cdn origin add:
-spo cdn origin list:
-spo cdn origin remove:
-spo cdn policy list:
-spo cdn policy set:
-spo cdn set:
-spo contenttype add:
-spo contenttype field set:
-spo contenttype get:
-spo customaction add:
-spo customaction clear:
-spo customaction get:
-spo customaction list:
-spo customaction remove:
-spo customaction set:
-spo externaluser list:
-spo feature list:
-spo field add:
-spo field get:
-spo field remove:
-spo field set:
-spo file add:
-spo file checkin:
-spo file checkout:
-spo file copy:
-spo file get:
-spo file list:
-spo file move:
-spo file remove:
-spo folder add:
-spo folder copy:
-spo folder get:
-spo folder list:
-spo folder move:
-spo folder remove:
-spo folder rename:
-spo hidedefaultthemes get:
-spo hidedefaultthemes set:
-spo hubsite connect:
-spo hubsite data get:
-spo hubsite disconnect:
-spo hubsite get:
-spo hubsite list:
-spo hubsite register:
-spo hubsite rights grant:
-spo hubsite rights revoke:
-spo hubsite set:
-spo hubsite theme sync:
-spo hubsite unregister:
-spo list add:
-spo list contenttype add:
-spo list contenttype list:
-spo list contenttype remove:
-spo list get:
-spo list label get:
-spo list label set:
-spo list list:
-spo list remove:
-spo list set:
-spo list sitescript get:
-spo list view field add:
-spo list view field remove:
-spo list view get:
-spo list view list:
-spo list view remove:
-spo list view set:
-spo list webhook add:
-spo list webhook get:
-spo list webhook list:
-spo list webhook remove:
-spo list webhook set:
-spo listitem add:
-spo listitem get:
-spo listitem list:
-spo listitem record declare:
-spo listitem record undeclare:
-spo listitem remove:
-spo listitem set:
-spo login:
-spo connect:
-spo logout:
-spo disconnect:
-spo navigation node add:
-spo navigation node list:
-spo navigation node remove:
-spo page add:
-spo page clientsidewebpart add:
-spo page column get:
-spo page column list:
-spo page control get:
-spo page control list:
-spo page get:
-spo page header set:
-spo page list:
-spo page remove:
-spo page section add:
-spo page section get:
-spo page section list:
-spo page set:
-spo page text add:
-spo propertybag get:
-spo propertybag list:
-spo propertybag remove:
-spo propertybag set:
-spo search:
-spo serviceprincipal grant add:
-spo sp grant add:
-spo serviceprincipal grant list:
-spo sp grant list:
-spo serviceprincipal grant revoke:
-spo sp grant revoke:
-spo serviceprincipal permissionrequest approve:
-spo sp permissionrequest approve:
-spo serviceprincipal permissionrequest deny:
-spo sp permissionrequest deny:
-spo serviceprincipal permissionrequest list:
-spo sp permissionrequest list:
-spo serviceprincipal set:
-spo sp set:
-spo site add:
-spo site appcatalog add:
-spo site appcatalog remove:
-spo site classic add:
-spo site classic list:
-spo site classic remove:
-spo site classic set:
-spo site get:
-spo site inplacerecordsmanagement set:
-spo site list:
-spo site o365group set:
-spo site groupify:
-spo site set:
-spo sitedesign add:
-spo sitedesign apply:
-spo sitedesign get:
-spo sitedesign list:
-spo sitedesign remove:
-spo sitedesign rights grant:
-spo sitedesign rights list:
-spo sitedesign rights revoke:
-spo sitedesign run list:
-spo sitedesign run status get:
-spo sitedesign set:
-spo sitedesign task get:
-spo sitedesign task list:
-spo sitescript add:
-spo sitescript get:
-spo sitescript list:
-spo sitescript remove:
-spo sitescript set:
-spo status:
-spo storageentity get:
-spo storageentity list:
-spo storageentity remove:
-spo storageentity set:
-spo tenant appcatalogurl get:
-spo tenant settings list:
-spo tenant settings set:
-spo term add:
-spo term get:
-spo term group add:
-spo term group get:
-spo term group list:
-spo term list:
-spo term set add:
-spo term set get:
-spo term set list:
-spo theme apply:
-spo theme get:
-spo theme list:
-spo theme remove:
-spo theme set:
-spo web add:
-spo web clientsidewebpart list:
-spo web get:
-spo web list:
-spo web reindex:
-spo web remove:
-spo web set:
+sites app add:
+sites app deploy:
+sites app get:
+sites app install:
+sites app remove:
+sites app retract:
+sites app uninstall:
+sites app upgrade:
+sites cdn get:
+sites cdn origin add:
+sites cdn origin get:
+sites cdn origin remove:
+sites cdn policy get:
+sites cdn policy set:
+sites cdn set:
+sites contenttype add:
+sites contenttype field set:
+sites contenttype get:
+sites customaction add:
+sites customaction clear:
+sites customaction get:
+sites customaction remove:
+sites customaction set:
+sites externaluser get:
+sites feature get:
+sites field add:
+sites field get:
+sites field remove:
+sites field set:
+sites file add:
+sites file checkin:
+sites file checkout:
+sites file copy:
+sites file get:
+sites file move:
+sites file remove:
+sites folder add:
+sites folder copy:
+sites folder get:
+sites folder move:
+sites folder remove:
+sites folder rename:
+sites hidedefaultthemes get:
+sites hidedefaultthemes set:
+sites hubsite connect:
+sites hubsite data get:
+sites hubsite disconnect:
+sites hubsite get:
+sites hubsite register:
+sites hubsite rights grant:
+sites hubsite rights revoke:
+sites hubsite set:
+sites hubsite theme sync:
+sites hubsite unregister:
+sites list add:
+sites list contenttype add:
+sites list contenttype get:
+sites list contenttype remove:
+sites list get:
+sites list label get:
+sites list label set:
+sites list remove:
+sites list set:
+sites list sitescript get:
+sites list view field add:
+sites list view field remove:
+sites list view get:
+sites list view remove:
+sites list view set:
+sites list webhook add:
+sites list webhook get:
+sites list webhook remove:
+sites list webhook set:
+sites listitem add:
+sites listitem get:
+sites listitem record declare:
+sites listitem record undeclare:
+sites listitem remove:
+sites listitem set:
+sites navigation node add:
+sites navigation node get:
+sites navigation node remove:
+sites page add:
+sites page clientsidewebpart add:
+sites page column get:
+sites page control get:
+sites page get:
+sites page header set:
+sites page remove:
+sites page section add:
+sites page section get:
+sites page set:
+sites page text add:
+sites propertybag get:
+sites propertybag remove:
+sites propertybag set:
+sites search:
+sites serviceprincipal grant add:
+sites sp grant add:
+sites serviceprincipal grant get:
+sites sp grant get:
+sites serviceprincipal grant revoke:
+sites sp grant revoke:
+sites serviceprincipal permissionrequest approve:
+sites sp permissionrequest approve:
+sites serviceprincipal permissionrequest deny:
+sites sp permissionrequest deny:
+sites serviceprincipal permissionrequest get:
+sites sp permissionrequest get:
+sites serviceprincipal set:
+sites sp set:
+sites site add:
+sites site appcatalog add:
+sites site appcatalog remove:
+sites site classic add:
+sites site classic get:
+sites site classic remove:
+sites site classic set:
+sites site get:
+sites site inplacerecordsmanagement set:
+sites site groupify:
+sites site set:
+sites sitedesign add:
+sites sitedesign apply:
+sites sitedesign get:
+sites sitedesign remove:
+sites sitedesign rights grant:
+sites sitedesign rights get:
+sites sitedesign rights revoke:
+sites sitedesign run get:
+sites sitedesign run status get:
+sites sitedesign set:
+sites sitedesign task get:
+sites sitescript add:
+sites sitescript get:
+sites sitescript remove:
+sites sitescript set:
+sites storageentity get:
+sites storageentity remove:
+sites storageentity set:
+sites tenant appcatalogurl get:
+sites tenant settings get:
+sites tenant settings set:
+sites term add:
+sites term get:
+sites term group add:
+sites term group get:
+sites term set add:
+sites term set get:
+sites theme apply:
+sites theme get:
+sites theme remove:
+sites theme set:
+sites web add:
+sites web clientsidewebpart get:
+sites web get:
+sites web reindex:
+sites web remove:
+sites web set:
