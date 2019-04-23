@@ -34,13 +34,13 @@ class ListCommands {
   private static processCommand(commandName: string, commandInfo: CommandInfo): string {
     let result: string = `${commandName}:\n`;
 
-    for(const opt of commandInfo.options) {
+    // for(const opt of commandInfo.options) {
 
-      const flags: string = (opt as any).flags;
-      if(['-o, --output [output]','--verbose','--debug'].indexOf(flags) === -1) {
-        result += `  - '${flags}'\n`;
-      }
-    }
+    //   const flags: string = (opt as any).flags;
+    //   if(['-o, --output [output]','--verbose','--debug'].indexOf(flags) === -1) {
+    //     result += `  - '${flags}'\n`;
+    //   }
+    // }
 
     return result;
   }
