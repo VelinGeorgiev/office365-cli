@@ -24,7 +24,7 @@ azmgmt logout:
 azmgmt disconnect:
 azmgmt status:
 graph groupsetting add:
-graph groupsetting get:
+graph groupsetting get: 
 graph groupsetting list:
 graph groupsetting remove:
 graph groupsetting set:
