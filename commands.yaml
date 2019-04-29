@@ -201,7 +201,6 @@ spo site classic set:
 spo site get:
 spo site inplacerecordsmanagement set:
 spo site list:
-spo site o365groups set:
 spo site groupify:
 spo site set:
 spo sitedesign add:
