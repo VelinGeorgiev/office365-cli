@@ -1,83 +1,70 @@
 help:
 exit:
 quit:
-aad login:
-aad connect:
-aad logout:
-aad disconnect:
+login:
+logout:
 aad oauth2grant add:
 aad oauth2grant list:
 aad oauth2grant remove:
 aad oauth2grant set:
 aad sp get:
-aad status:
-azmgmt flow environment get:
-azmgmt flow environment list:
-azmgmt flow export:
-azmgmt flow get:
-azmgmt flow list:
-azmgmt flow run get:
-azmgmt flow run list:
-azmgmt login:
-azmgmt connect:
-azmgmt logout:
-azmgmt disconnect:
-azmgmt status:
-graph groupsetting add:
-graph groupsetting get: 
-graph groupsetting list:
-graph groupsetting remove:
-graph groupsetting set:
-graph groupsettingtemplate get:
-graph groupsettingtemplate list:
-graph login:
-graph connect:
-graph logout:
-graph disconnect:
-graph o365group add:
-graph o365group get:
-graph o365group list:
-graph o365group remove:
-graph o365group restore:
-graph o365group set:
-graph o365group user add:
-graph teams user add:
+flow environment get:
+flow environment list:
+flow export:
+flow get:
+flow list:
+flow run get:
+flow run list:
+aad groupsetting add:
+aad groupsetting get: 
+aad groupsetting list:
+aad groupsetting remove:
+aad groupsetting set:
+aad groupsettingtemplate get:
+aad groupsettingtemplate list:
+aad o365group add:
+aad o365group get:
+aad o365group list:
+aad o365group remove:
+aad o365group restore:
+aad o365group set:
+aad o365group user add:
+teams user add:
 graph schemaextension add:
-graph siteclassification disable:
-graph siteclassification enable:
-graph siteclassification get:
-graph siteclassification set:
-graph status:
-graph teams add:
-graph teams app install:
-graph teams app list:
-graph teams app publish:
-graph teams app remove:
-graph teams app uninstall:
-graph teams app update:
-graph teams channel add:
-graph teams channel get:
-graph teams channel list:
-graph teams channel set:
-graph teams funsettings list:
-graph teams guestsettings list:
-graph teams guestsettings set:
-graph teams list:
-graph teams membersettings list:
-graph teams membersettings set:
-graph teams message get:
-graph teams channel message get:
-graph teams message list:
-graph teams messagingsettings list:
-graph teams messagingsettings set:
-graph teams tab list:
-graph teams unarchive:
-graph teams user list:
-graph teams user remove:
-graph teams user set:
-graph user get:
-graph user list:
-graph user sendmail:
+aad siteclassification disable:
+aad siteclassification enable:
+aad siteclassification get:
+aad siteclassification set:
+teams add:
+teams app install:
+teams app list:
+teams app publish:
+teams app remove:
+teams app uninstall:
+teams app update:
+teams channel add:
+teams channel get:
+teams channel list:
+teams channel set:
+teams funsettings list:
+teams guestsettings list:
+teams guestsettings set:
+teams list:
+teams membersettings list:
+teams membersettings set:
+teams message get:
+teams channel message get:
+teams message list:
+teams messagingsettings list:
+teams messagingsettings set:
+teams tab list:
+teams unarchive:
+teams user list:
+teams user remove:
+teams user set:
+aad user get:
+aad user list:
+mail send:
 spfx project upgrade:
 spo app add:
 spo app deploy:
@@ -167,10 +154,6 @@ spo listitem record declare:
 spo listitem record undeclare:
 spo listitem remove:
 spo listitem set:
-spo login:
-spo connect:
-spo logout:
-spo disconnect:
 spo navigation node add:
 spo navigation node list:
 spo navigation node remove:
@@ -218,7 +201,6 @@ spo site classic set:
 spo site get:
 spo site inplacerecordsmanagement set:
 spo site list:
-spo site o365group set:
 spo site groupify:
 spo site set:
 spo sitedesign add:
@@ -239,7 +221,6 @@ spo sitescript get:
 spo sitescript list:
 spo sitescript remove:
 spo sitescript set:
-spo status:
 spo storageentity get:
 spo storageentity list:
 spo storageentity remove:
