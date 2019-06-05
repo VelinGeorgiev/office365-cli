@@ -1,42 +1,39 @@
 help:
 exit:
 quit:
-o365 login:
+aad login:
   - '-t, --authType [authType]'
   - '-u, --userName [userName]'
   - '-p, --password [password]'
   - '-c, --certificateFile [certificateFile]'
   - '--thumbprint [thumbprint]'
-o365 connect:
+aad connect:
   - '-t, --authType [authType]'
   - '-u, --userName [userName]'
   - '-p, --password [password]'
   - '-c, --certificateFile [certificateFile]'
   - '--thumbprint [thumbprint]'
-o365 logout:
-o365 disconnect:
-o365 oauth2grant add:
+aad logout:
+aad disconnect:
+aad oauth2grant add:
   - '-i, --clientId <clientId>'
   - '-r, --resourceId <resourceId>'
-  - '--scope <scope>'
-o365 oauth2grant list:
+  - '-s, --scope <scope>'
+aad oauth2grant list:
   - '-i, --clientId <clientId>'
-o365 oauth2grant remove:
+aad oauth2grant remove:
   - '-i, --grantId <grantId>'
-o365 oauth2grant set:
+aad oauth2grant set:
   - '-i, --grantId <grantId>'
-  - '--scope <scope>'
+  - '-s, --scope <scope>'
 aad sp get:
-  - '-a, --appId [appId]'
+  - '-i, --appId [appId]'
   - '-n, --displayName [displayName]'
-o365 status:
-flow environment get:
+aad status:
+azmgmt flow environment get:
   - '-n, --name <name>'
-flow env get:
-  - '-n, --name <name>'
-flow environment list:
-flow env list:
-flow export:
+azmgmt flow environment list:
+azmgmt flow export:
   - '-i, --id <id>'
   - '-e, --environment <environment>'
   - '-n, --packageDisplayName [packageDisplayName]'
@@ -45,35 +42,64 @@ flow export:
   - '-s, --packageSourceEnvironment [packageSourceEnvironment]'
   - '-f, --format [format]'
   - '-p, --path [path]'
-flow get:
+azmgmt flow get:
   - '-n, --name <name>'
   - '-e, --environment <environment>'
   - '--asAdmin'
-flow list:
+azmgmt flow list:
   - '-e, --environment <environment>'
   - '--asAdmin'
-flow run get:
+azmgmt flow run get:
   - '-n, --name <name>'
   - '-f, --flow <flow>'
   - '-e, --environment <environment>'
-flow run list:
+azmgmt flow run list:
   - '-f, --flow <flow>'
   - '-e, --environment <environment>'
-group setting add:
+azmgmt login:
+  - '-t, --authType [authType]'
+  - '-u, --userName [userName]'
+  - '-p, --password [password]'
+  - '-c, --certificateFile [certificateFile]'
+  - '--thumbprint [thumbprint]'
+azmgmt connect:
+  - '-t, --authType [authType]'
+  - '-u, --userName [userName]'
+  - '-p, --password [password]'
+  - '-c, --certificateFile [certificateFile]'
+  - '--thumbprint [thumbprint]'
+azmgmt logout:
+azmgmt disconnect:
+azmgmt status:
+graph groupsetting add:
   - '-i, --templateId <templateId>'
-group setting get:
+graph groupsetting get:
   - '-i, --id <id>'
-group setting list:
-group setting remove:
+graph groupsetting list:
+graph groupsetting remove:
   - '-i, --id <id>'
   - '--confirm'
-group setting set:
+graph groupsetting set:
   - '-i, --id <id>'
-group template get:
+graph groupsettingtemplate get:
   - '-i, --id [id]'
   - '-n, --displayName [displayName]'
-group template list:
-group add:
+graph groupsettingtemplate list:
+graph login:
+  - '-t, --authType [authType]'
+  - '-u, --userName [userName]'
+  - '-p, --password [password]'
+  - '-c, --certificateFile [certificateFile]'
+  - '--thumbprint [thumbprint]'
+graph connect:
+  - '-t, --authType [authType]'
+  - '-u, --userName [userName]'
+  - '-p, --password [password]'
+  - '-c, --certificateFile [certificateFile]'
+  - '--thumbprint [thumbprint]'
+graph logout:
+graph disconnect:
+graph o365group add:
   - '-n, --displayName <displayName>'
   - '-d, --description <description>'
   - '-m, --mailNickname <mailNickname>'
@@ -81,20 +107,23 @@ group add:
   - '--members [members]'
   - '--isPrivate [isPrivate]'
   - '-l, --logoPath [logoPath]'
-group get:
+graph o365group get:
   - '-i, --id <id>'
   - '--includeSiteUrl'
-group list:
-  - '-n, --displayName [displayName]'
-  - '-m, --mailNickname [mailNickname]'
+graph o365group list:
+  - '-d, --displayName [displayName]'
+  - '-m, --mailNickname [displayName]'
   - '--includeSiteUrl'
   - '--deleted'
-group remove:
+  - '--orphaned'
+graph o365group remove:
   - '-i, --id <id>'
   - '--confirm'
-group restore:
+graph o365group renew:
   - '-i, --id <id>'
-group set:
+graph o365group restore:
+  - '-i, --id <id>'
+graph o365group set:
   - '-i, --id <id>'
   - '-n, --displayName [displayName]'
   - '-d, --description [description]'
@@ -102,133 +131,171 @@ group set:
   - '--members [members]'
   - '--isPrivate [isPrivate]'
   - '-l, --logoPath [logoPath]'
-group user add:
-  - '-u, --userName <userName>'
-  - '--groupId [groupId]'
-  - '-i, --teamId [teamId]'
+graph o365group user add:
+  - '-n, --userName <userName>'
+  - '-i, --groupId [groupId]'
+  - '--teamId [teamId]'
   - '-r, --role [role]'
-teams user add:
-  - '-u, --userName <userName>'
-  - '--groupId [groupId]'
-  - '-i, --teamId [teamId]'
+graph teams user add:
+  - '-n, --userName <userName>'
+  - '-i, --groupId [groupId]'
+  - '--teamId [teamId]'
   - '-r, --role [role]'
+graph o365group user list:
+  - '-i, --groupId [groupId]'
+  - '--teamId [teamId]'
+  - '-r, --role [type]'
+graph teams user list:
+  - '-i, --groupId [groupId]'
+  - '--teamId [teamId]'
+  - '-r, --role [type]'
+graph o365group user remove:
+  - '-i, --groupId [groupId]'
+  - '--teamId [teamId]'
+  - '-n, --userName <userName>'
+  - '--confirm'
+graph teams user remove:
+  - '-i, --groupId [groupId]'
+  - '--teamId [teamId]'
+  - '-n, --userName <userName>'
+  - '--confirm'
+graph o365group user set:
+  - '-i, --groupId [groupId]'
+  - '--teamId [teamId]'
+  - '-n, --userName <userName>'
+  - '-r, --role <role>'
+graph teams user set:
+  - '-i, --groupId [groupId]'
+  - '--teamId [teamId]'
+  - '-n, --userName <userName>'
+  - '-r, --role <role>'
 graph schemaextension add:
   - '-i, --id <id>'
   - '-d, --description [description]'
   - '--owner <owner>'
   - '-t, --targetTypes <targetTypes>'
   - '-p, --properties <properties>'
-site classification disable:
+graph siteclassification disable:
   - '--confirm'
-site classification enable:
+graph siteclassification enable:
   - '-c, --classifications <classifications>'
   - '-d, --defaultClassification <defaultClassification>'
   - '-u, --usageGuidelinesUrl [usageGuidelinesUrl]'
   - '-g, --guestUsageGuidelinesUrl [guestUsageGuidelinesUrl]'
-site classification get:
-site classification set:
+graph siteclassification get:
+graph siteclassification set:
   - '-c, --classifications [classifications]'
   - '-d, --defaultClassification [defaultClassification]'
   - '-u, --usageGuidelinesUrl [usageGuidelinesUrl]'
   - '-g, --guestUsageGuidelinesUrl [guestUsageGuidelinesUrl]'
-teams add:
+graph status:
+graph teams add:
   - '-n, --name [name]'
   - '-d, --description [description]'
-  - '--groupId [groupId]'
-teams app install:
-  - '-a, --appId <appId>'
-  - '-i, --teamId <teamId>'
-teams app list:
+  - '-i, --groupId [groupId]'
+graph teams app install:
+  - '--appId <appId>'
+  - '--teamId <teamId>'
+graph teams app list:
   - '-a, --all'
   - '-i, --teamId [teamId]'
-teams app publish:
+graph teams app publish:
   - '-p, --filePath <filePath>'
-teams app remove:
+graph teams app remove:
   - '-i, --id <id>'
   - '--confirm'
-teams app uninstall:
-  - '-a, --appId <appId>'
+graph teams app uninstall:
+  - '--appId <appId>'
+  - '--teamId <teamId>'
+  - '--confirm'
+graph teams app update:
+  - '-i, --id <id>'
+  - '-p, --filePath <filePath>'
+graph teams archive:
   - '-i, --teamId <teamId>'
-  - '--confirm'
-teams app update:
-  - '-i, --id <id>'
-  - '-p, --filePath <filePath>'
-teams channel add:
+  - '--shouldSetSpoSiteReadOnlyForMembers'
+graph teams channel add:
   - '-i, --teamId <teamId>'
   - '-n, --name <name>'
   - '-d, --description [description]'
-teams channel get:
+graph teams channel get:
   - '-i, --teamId <teamId>'
   - '-c, --channelId <channelId>'
-teams channel list:
+graph teams channel list:
   - '-i, --teamId <teamId>'
-teams channel set:
+graph teams channel set:
   - '-i, --teamId <teamId>'
   - '--channelName <channelName>'
   - '--newChannelName [newChannelName]'
+  - '--description [description]'
+graph teams clone:
+  - '-i, --teamId <teamId>'
+  - '-n, --displayName <displayName>'
+  - '-p, --partsToClone <partsToClone>'
   - '-d, --description [description]'
-teams funsettings list:
+  - '-c, --classification [classification]'
+  - '-v, --visibility [visibility]'
+graph teams funsettings list:
   - '-i, --teamId <teamId>'
-teams guestsettings list:
+graph teams guestsettings list:
   - '-i, --teamId <teamId>'
-teams guestsettings set:
+graph teams guestsettings set:
   - '-i, --teamId <teamId>'
   - '--allowCreateUpdateChannels [allowCreateUpdateChannels]'
   - '--allowDeleteChannels [allowDeleteChannels]'
-teams list:
+graph teams list:
   - '-j, --joined'
-teams membersettings list:
+graph teams membersettings list:
   - '-i, --teamId <teamId>'
-teams membersettings set:
+graph teams membersettings set:
   - '-i, --teamId <teamId>'
   - '--allowAddRemoveApps [allowAddRemoveApps]'
   - '--allowCreateUpdateChannels [allowCreateUpdateChannels]'
   - '--allowCreateUpdateRemoveConnectors [allowCreateUpdateRemoveConnectors]'
   - '--allowCreateUpdateRemoveTabs [allowCreateUpdateRemoveTabs]'
   - '--allowDeleteChannels [allowDeleteChannels]'
-teams message get:
+graph teams message get:
   - '-i, --teamId <teamId>'
   - '-c, --channelId <channelId>'
   - '-m, --messageId <messageId>'
-teams channel message get:
+graph teams channel message get:
   - '-i, --teamId <teamId>'
   - '-c, --channelId <channelId>'
   - '-m, --messageId <messageId>'
-teams message list:
+graph teams message list:
   - '-i, --teamId <teamId>'
   - '-c, --channelId <channelId>'
-teams messagingsettings list:
+graph teams messagingsettings list:
   - '-i, --teamId <teamId>'
-teams messagingsettings set:
+graph teams messagingsettings set:
   - '-i, --teamId <teamId>'
   - '--allowUserEditMessages [allowUserEditMessages]'
   - '--allowUserDeleteMessages [allowUserDeleteMessages]'
   - '--allowOwnerDeleteMessages [allowOwnerDeleteMessages]'
   - '--allowTeamMentions [allowTeamMentions]'
   - '--allowChannelMentions [allowChannelMentions]'
-teams tab list:
+graph teams remove:
+  - '-i, --teamId <teamId>'
+  - '--confirm'
+graph teams set:
+  - '-i, --teamId <teamId>'
+  - '--displayName [displayName]'
+  - '--description [description]'
+  - '--mailNickName [mailNickName]'
+  - '--classification [classification]'
+  - '--visibility [visibility]'
+graph teams tab list:
   - '-i, --teamId <teamId>'
   - '-c, --channelId <channelId>'
-teams unarchive:
+graph teams unarchive:
   - '-i, --teamId <teamId>'
-teams user list:
-  - '-i, --teamId <teamId>'
-  - '-r, --role [type]'
-teams user remove:
-  - '-i, --teamId <teamId>'
-  - '-u, --userName <userName>'
-  - '--confirm'
-teams user set:
-  - '-i, --teamId <teamId>'
-  - '-u, --userName <userName>'
-  - '-r, --role <role>'
-user get:
+graph user get:
   - '-i, --id [id]'
-  - '-u, --userName [userName]'
+  - '-n, --userName [userName]'
   - '-p, --properties [properties]'
-user list:
+graph user list:
   - '-p, --properties [properties]'
-user sendmail:
+graph user sendmail:
   - '-s, --subject <subject>'
   - '-t, --to <to>'
   - '--bodyContents [bodyContents]'
@@ -237,9 +304,10 @@ user sendmail:
   - '--saveToSentItems [saveToSentItems]'
 spfx project upgrade:
   - '-v, --toVersion [toVersion]'
+  - '--packageManager [packageManager]'
 spo app add:
   - '-p, --filePath <filePath>'
-  - '--scope [scope]'
+  - '-s, --scope [scope]'
   - '-u, --appCatalogUrl [appCatalogUrl]'
   - '--overwrite [overwrite]'
 spo app deploy:
@@ -247,28 +315,28 @@ spo app deploy:
   - '-n, --name [name]'
   - '-u, --appCatalogUrl [appCatalogUrl]'
   - '--skipFeatureDeployment'
-  - '--scope [scope]'
+  - '-s, --scope [scope]'
 spo app get:
   - '-i, --id [id]'
   - '-n, --name [name]'
   - '-u, --appCatalogUrl [appCatalogUrl]'
-  - '--scope [scope]'
+  - '-s, --scope [scope]'
 spo app install:
   - '-i, --id <id>'
   - '-s, --siteUrl <siteUrl>'
   - '--scope [scope]'
 spo app list:
-  - '--scope [scope]'
+  - '-s, --scope [scope]'
   - '-u, --appCatalogUrl [appCatalogUrl]'
 spo app remove:
   - '-i, --id <id>'
   - '-u, --appCatalogUrl [appCatalogUrl]'
-  - '--scope [scope]'
+  - '-s, --scope [scope]'
   - '--confirm'
 spo app retract:
   - '-i, --id <id>'
   - '-u, --appCatalogUrl [appCatalogUrl]'
-  - '--scope [scope]'
+  - '-s, --scope [scope]'
   - '--confirm'
 spo app uninstall:
   - '-i, --id <id>'
@@ -280,43 +348,55 @@ spo app upgrade:
   - '-s, --siteUrl <siteUrl>'
   - '--scope [scope]'
 spo cdn get:
-  - '--type [type]'
+  - '-t, --type [type]'
 spo cdn origin add:
-  - '--type [type]'
+  - '-t, --type [type]'
   - '-r, --origin <origin>'
 spo cdn origin list:
-  - '--type [type]'
+  - '-t, --type [type]'
 spo cdn origin remove:
-  - '--type [type]'
+  - '-t, --type [type]'
   - '-r, --origin <origin>'
   - '--confirm'
 spo cdn policy list:
-  - '--type [type]'
+  - '-t, --type [type]'
 spo cdn policy set:
-  - '--type [type]'
+  - '-t, --type [type]'
   - '-p, --policy <policy>'
   - '-v, --value <value>'
 spo cdn set:
   - '-e, --enabled <enabled>'
-  - '--type [type]'
+  - '-t, --type [type]'
   - '--noDefaultOrigins'
 spo contenttype add:
-  - '-w, --webUrl <webUrl>'
-  - '--listTitle [listTitle]'
+  - '-u, --webUrl <webUrl>'
+  - '-l, --listTitle [listTitle]'
   - '-i, --id <id>'
   - '-n, --name <name>'
   - '-d, --description [description]'
   - '-g, --group [group]'
+spo contenttype field remove:
+  - '-u, --webUrl <webUrl>'
+  - '-l, --listTitle [listTitle]'
+  - '-i, --contentTypeId <contentTypeId>'
+  - '-f, --fieldLinkId <fieldLinkId>'
+  - '-c, --updateChildContentTypes'
+  - '--confirm'
 spo contenttype field set:
-  - '-w, --webUrl <webUrl>'
+  - '-u, --webUrl <webUrl>'
   - '-c, --contentTypeId <contentTypeId>'
   - '-f, --fieldId <fieldId>'
   - '-r, --required [required]'
   - '-h, --hidden [hidden]'
 spo contenttype get:
-  - '-w, --webUrl <webUrl>'
-  - '--listTitle [listTitle]'
+  - '-u, --webUrl <webUrl>'
+  - '-l, --listTitle [listTitle]'
   - '-i, --id <id>'
+spo contenttype remove:
+  - '-u, --webUrl <webUrl>'
+  - '-i, --id [id]'
+  - '-n, --name [name]'
+  - '--confirm'
 spo customaction add:
   - '-u, --url <url>'
   - '-n, --name <name>'
@@ -330,27 +410,27 @@ spo customaction add:
   - '-e, --commandUIExtension [commandUIExtension]'
   - '--registrationId [registrationId]'
   - '--registrationType [registrationType]'
-  - '-r, --rights [rights]'
-  - '--scope [scope]'
+  - '--rights [rights]'
+  - '-s, --scope [scope]'
   - '--scriptBlock [scriptBlock]'
   - '--scriptSrc [scriptSrc]'
   - '-c, --clientSideComponentId [clientSideComponentId]'
   - '-p, --clientSideComponentProperties [clientSideComponentProperties]'
 spo customaction clear:
   - '-u, --url <url>'
-  - '--scope [scope]'
+  - '-s, --scope [scope]'
   - '--confirm'
 spo customaction get:
   - '-i, --id <id>'
   - '-u, --url <url>'
-  - '--scope [scope]'
+  - '-s, --scope [scope]'
 spo customaction list:
   - '-u, --url <url>'
-  - '--scope [scope]'
+  - '-s, --scope [scope]'
 spo customaction remove:
   - '-i, --id <id>'
   - '-u, --url <url>'
-  - '--scope [scope]'
+  - '-s, --scope [scope]'
   - '--confirm'
 spo customaction set:
   - '-u, --url <url>'
@@ -366,50 +446,50 @@ spo customaction set:
   - '-e, --commandUIExtension [commandUIExtension]'
   - '--registrationId [registrationId]'
   - '--registrationType [registrationType]'
-  - '-r, --rights [rights]'
-  - '--scope [scope]'
+  - '--rights [rights]'
+  - '-s, --scope [scope]'
   - '--scriptBlock [scriptBlock]'
   - '--scriptSrc [scriptSrc]'
   - '-c, --clientSideComponentId [clientSideComponentId]'
   - '-p, --clientSideComponentProperties [clientSideComponentProperties]'
 spo externaluser list:
-  - '--filter [filter]'
-  - '--pageSize [pageSize]'
+  - '-f, --filter [filter]'
+  - '-p, --pageSize [pageSize]'
   - '-i, --position [position]'
-  - '-o, --sortOrder [sortOrder]'
-  - '-s, --siteUrl [siteUrl]'
+  - '-s, --sortOrder [sortOrder]'
+  - '-u, --siteUrl [siteUrl]'
 spo feature list:
   - '-u, --url <url>'
-  - '--scope [scope]'
+  - '-s, --scope [scope]'
 spo field add:
-  - '-w, --webUrl <webUrl>'
-  - '--listTitle [listTitle]'
+  - '-u, --webUrl <webUrl>'
+  - '-l, --listTitle [listTitle]'
   - '-x, --xml <xml>'
   - '--options [options]'
 spo field get:
-  - '-w, --webUrl <webUrl>'
-  - '--listTitle [listTitle]'
-  - '-l, --listId [listId]'
+  - '-u, --webUrl <webUrl>'
+  - '-l, --listTitle [listTitle]'
+  - '--listId [listId]'
   - '--listUrl [listUrl]'
   - '-i, --id [id]'
   - '--fieldTitle [fieldTitle]'
 spo field remove:
-  - '-w, --webUrl <webUrl>'
-  - '--listTitle [listTitle]'
-  - '-l, --listId [listId]'
+  - '-u, --webUrl <webUrl>'
+  - '-l, --listTitle [listTitle]'
+  - '--listId [listId]'
   - '--listUrl [listUrl]'
   - '-i, --id [id]'
-  - '--fieldTitle [fieldTitle]'
+  - '-t, --fieldTitle [fieldTitle]'
   - '--confirm'
 spo field set:
-  - '-w, --webUrl <webUrl>'
-  - '-l, --listId [listId]'
+  - '-u, --webUrl <webUrl>'
+  - '--listId [listId]'
   - '--listTitle [listTitle]'
   - '-i|--id [id]'
   - '-n|--name [name]'
   - '--updateExistingLists'
 spo file add:
-  - '-w, --webUrl <webUrl>'
+  - '-u, --webUrl <webUrl>'
   - '-f, --folder <folder>'
   - '-p, --path <path>'
   - '-c, --contentType [contentType]'
@@ -420,17 +500,17 @@ spo file add:
   - '--publish'
   - '--publishComment [publishComment]'
 spo file checkin:
-  - '-w, --webUrl <webUrl>'
+  - '-u, --webUrl <webUrl>'
   - '-f, --fileUrl [fileUrl]'
   - '-i, --id [id]'
-  - '--type [type]'
-  - '-c, --comment [comment]'
+  - '-t, --type [type]'
+  - '--comment [comment]'
 spo file checkout:
-  - '-w, --webUrl <webUrl>'
+  - '-u, --webUrl <webUrl>'
   - '-f, --fileUrl [fileUrl]'
   - '-i, --id [id]'
 spo file copy:
-  - '-w, --webUrl <webUrl>'
+  - '-u, --webUrl <webUrl>'
   - '-s, --sourceUrl <sourceUrl>'
   - '-t, --targetUrl <targetUrl>'
   - '--deleteIfAlreadyExists'
@@ -444,10 +524,10 @@ spo file get:
   - '--asFile'
   - '-p, --path [path]'
 spo file list:
-  - '-w, --webUrl <webUrl>'
+  - '-u, --webUrl <webUrl>'
   - '-f, --folder <folder>'
 spo file move:
-  - '-w, --webUrl <webUrl>'
+  - '-u, --webUrl <webUrl>'
   - '-s, --sourceUrl <sourceUrl>'
   - '-t, --targetUrl <targetUrl>'
   - '--deleteIfAlreadyExists'
@@ -459,32 +539,32 @@ spo file remove:
   - '--recycle'
   - '--confirm'
 spo folder add:
-  - '-w, --webUrl <webUrl>'
+  - '-u, --webUrl <webUrl>'
   - '-p, --parentFolderUrl <parentFolderUrl>'
   - '-n, --name <name>'
 spo folder copy:
-  - '-w, --webUrl <webUrl>'
+  - '-u, --webUrl <webUrl>'
   - '-s, --sourceUrl <sourceUrl>'
   - '-t, --targetUrl <targetUrl>'
   - '--allowSchemaMismatch'
 spo folder get:
-  - '-w, --webUrl <webUrl>'
+  - '-u, --webUrl <webUrl>'
   - '-f, --folderUrl <folderUrl>'
 spo folder list:
-  - '-w, --webUrl <webUrl>'
+  - '-u, --webUrl <webUrl>'
   - '-p, --parentFolderUrl <parentFolderUrl>'
 spo folder move:
-  - '-w, --webUrl <webUrl>'
+  - '-u, --webUrl <webUrl>'
   - '-s, --sourceUrl <sourceUrl>'
   - '-t, --targetUrl <targetUrl>'
   - '--allowSchemaMismatch'
 spo folder remove:
-  - '-w, --webUrl <webUrl>'
+  - '-u, --webUrl <webUrl>'
   - '-f, --folderUrl <folderUrl>'
   - '--recycle'
   - '--confirm'
 spo folder rename:
-  - '-w, --webUrl <webUrl>'
+  - '-u, --webUrl <webUrl>'
   - '-f, --folderUrl <folderUrl>'
   - '-n, --name <name>'
 spo hidedefaultthemes get:
@@ -494,7 +574,7 @@ spo hubsite connect:
   - '-u, --url <url>'
   - '-i, --hubSiteId <hubSiteId>'
 spo hubsite data get:
-  - '-w, --webUrl <webUrl>'
+  - '-u, --webUrl <webUrl>'
   - '-f, --forceRefresh'
 spo hubsite disconnect:
   - '-u, --url <url>'
@@ -519,15 +599,15 @@ spo hubsite set:
   - '-d, --description [description]'
   - '-l, --logoUrl [logoUrl]'
 spo hubsite theme sync:
-  - '-w, --webUrl <webUrl>'
+  - '-u, --webUrl <webUrl>'
 spo hubsite unregister:
   - '-u, --url <url>'
   - '--confirm'
 spo list add:
   - '-t, --title <title>'
   - '--baseTemplate <baseTemplate>'
-  - '-w, --webUrl <webUrl>'
-  - '-d, --description [description]'
+  - '-u, --webUrl <webUrl>'
+  - '--description [description]'
   - '--templateFeatureId [templateFeatureId]'
   - '--schemaXml [schemaXml]'
   - '--allowDeletion [allowDeletion]'
@@ -560,7 +640,7 @@ spo list add:
   - '--followable [followable]'
   - '--forceCheckout [forceCheckout]'
   - '--forceDefaultContentType [forceDefaultContentType]'
-  - '-h, --hidden [hidden]'
+  - '--hidden [hidden]'
   - '--includedInMyFilesScope [includedInMyFilesScope]'
   - '--irmEnabled [irmEnabled]'
   - '--irmExpire [irmExpire]'
@@ -575,7 +655,7 @@ spo list add:
   - '--noCrawl [noCrawl]'
   - '--onQuickLaunch [onQuickLaunch]'
   - '--ordered [ordered]'
-  - '--parserDisabled [parserDisabled]'
+  - '-parserDisabled [parserDisabled]'
   - '--readOnlyUI [readOnlyUI]'
   - '--readSecurity [readSecurity]'
   - '--requestAccessEnabled [requestAccessEnabled]'
@@ -588,47 +668,47 @@ spo list add:
   - '--validationMessage [validationMessage]'
   - '--writeSecurity [writeSecurity]'
 spo list contenttype add:
-  - '-w, --webUrl <webUrl>'
+  - '-u, --webUrl <webUrl>'
   - '-l, --listId [listId]'
-  - '--listTitle [listTitle]'
+  - '-t, --listTitle [listTitle]'
   - '-c, --contentTypeId <contentTypeId>'
 spo list contenttype list:
-  - '-w, --webUrl <webUrl>'
+  - '-u, --webUrl <webUrl>'
   - '-l, --listId [listId]'
-  - '--listTitle [listTitle]'
+  - '-t, --listTitle [listTitle]'
 spo list contenttype remove:
-  - '-w, --webUrl <webUrl>'
+  - '-u, --webUrl <webUrl>'
   - '-l, --listId [listId]'
-  - '--listTitle [listTitle]'
+  - '-t, --listTitle [listTitle]'
   - '-c, --contentTypeId <contentTypeId>'
   - '--confirm'
 spo list get:
-  - '-w, --webUrl <webUrl>'
+  - '-u, --webUrl <webUrl>'
   - '-i, --id [id]'
   - '-t, --title [title]'
 spo list label get:
-  - '-w, --webUrl <webUrl>'
+  - '-u, --webUrl <webUrl>'
   - '-l, --listId [listId]'
-  - '--listTitle [listTitle]'
+  - '-t, --listTitle [listTitle]'
 spo list label set:
-  - '-w, --webUrl <webUrl>'
+  - '-u, --webUrl <webUrl>'
   - '--label <label>'
-  - '--listTitle [listTitle]'
+  - '-t, --listTitle [listTitle]'
   - '-l, --listId [listId]'
   - '--listUrl [listUrl]'
   - '--syncToItems'
   - '--blockDelete'
   - '--blockEdit'
 spo list list:
-  - '-w, --webUrl <webUrl>'
+  - '-u, --webUrl <webUrl>'
 spo list remove:
-  - '-w, --webUrl <webUrl>'
+  - '-u, --webUrl <webUrl>'
   - '-i, --id [id]'
   - '-t, --title [title]'
   - '--confirm'
 spo list set:
   - '-i, --id <id>'
-  - '-w, --webUrl <webUrl>'
+  - '-u, --webUrl <webUrl>'
   - '-t, --title [title]'
   - '--allowDeletion [allowDeletion]'
   - '--allowEveryoneViewItems [allowEveryoneViewItems]'
@@ -661,7 +741,7 @@ spo list set:
   - '--followable [followable]'
   - '--forceCheckout [forceCheckout]'
   - '--forceDefaultContentType [forceDefaultContentType]'
-  - '-h, --hidden [hidden]'
+  - '--hidden [hidden]'
   - '--includedInMyFilesScope [includedInMyFilesScope]'
   - '--irmEnabled [irmEnabled]'
   - '--irmExpire [irmExpire]'
@@ -691,195 +771,214 @@ spo list set:
   - '--validationMessage [validationMessage]'
   - '--writeSecurity [writeSecurity]'
 spo list sitescript get:
-  - '-w, --webUrl <webUrl>'
+  - '-u, --webUrl <webUrl>'
   - '-l, --listId [listId]'
-  - '--listTitle [listTitle]'
+  - '-t, --listTitle [listTitle]'
 spo list view field add:
-  - '-w, --webUrl <webUrl>'
-  - '-l, --listId [listId]'
+  - '-u, --webUrl <webUrl>'
+  - '--listId [listId]'
   - '--listTitle [listTitle]'
   - '--viewId [viewId]'
   - '--viewTitle [viewTitle]'
-  - '-f, --fieldId [fieldId]'
+  - '--fieldId [fieldId]'
   - '--fieldTitle [fieldTitle]'
   - '--fieldPosition [fieldPosition]'
 spo list view field remove:
-  - '-w, --webUrl <webUrl>'
-  - '-l, --listId [listId]'
+  - '-u, --webUrl <webUrl>'
+  - '--listId [listId]'
   - '--listTitle [listTitle]'
   - '--viewId [viewId]'
   - '--viewTitle [viewTitle]'
-  - '-f, --fieldId [fieldId]'
+  - '--fieldId [fieldId]'
   - '--fieldTitle [fieldTitle]'
   - '--confirm'
 spo list view get:
-  - '-w, --webUrl <webUrl>'
-  - '-l, --listId [listId]'
+  - '-u, --webUrl <webUrl>'
+  - '--listId [listId]'
   - '--listTitle [listTitle]'
   - '--listUrl [listUrl]'
   - '--viewId [viewId]'
   - '--viewTitle [viewTitle]'
 spo list view list:
-  - '-w, --webUrl <webUrl>'
-  - '-l, --listId [listId]'
-  - '--listTitle [listTitle]'
+  - '-u, --webUrl <webUrl>'
+  - '-i, --listId [listId]'
+  - '-t, --listTitle [listTitle]'
 spo list view remove:
-  - '-w, --webUrl <webUrl>'
-  - '-l, --listId [listId]'
+  - '-u, --webUrl <webUrl>'
+  - '--listId [listId]'
   - '--listTitle [listTitle]'
   - '--viewId [viewId]'
   - '--viewTitle [viewTitle]'
   - '--confirm'
 spo list view set:
-  - '-w, --webUrl <webUrl>'
-  - '-l, --listId [listId]'
+  - '-u, --webUrl <webUrl>'
+  - '--listId [listId]'
   - '--listTitle [listTitle]'
   - '--viewId [viewId]'
   - '--viewTitle [viewTitle]'
 spo list webhook add:
-  - '-w, --webUrl <webUrl>'
+  - '-u, --webUrl <webUrl>'
   - '-l, --listId [listId]'
-  - '--listTitle [listTitle]'
+  - '-t, --listTitle [listTitle]'
   - '-n, --notificationUrl <notificationUrl>'
   - '-e, --expirationDateTime [expirationDateTime]'
   - '-c, --clientState [clientState]'
 spo list webhook get:
-  - '-w, --webUrl <webUrl>'
+  - '-u, --webUrl <webUrl>'
   - '-l, --listId [listId]'
-  - '--listTitle [listTitle]'
+  - '-t, --listTitle [listTitle]'
   - '-i, --id [id]'
 spo list webhook list:
-  - '-w, --webUrl <webUrl>'
-  - '-l, --listId [listId]'
-  - '--listTitle [listTitle]'
-  - '-i, --id [id]'
-  - '-t, --title [title]'
+  - '-u, --webUrl <webUrl>'
+  - '-i, --listId [listId]'
+  - '-t, --listTitle [listTitle]'
+  - '--id [id]'
+  - '--title [title]'
 spo list webhook remove:
-  - '-w, --webUrl <webUrl>'
+  - '-u, --webUrl <webUrl>'
   - '-l, --listId [listId]'
-  - '--listTitle [listTitle]'
+  - '-t, --listTitle [listTitle]'
   - '-i, --id <id>'
   - '--confirm'
 spo list webhook set:
-  - '-w, --webUrl <webUrl>'
+  - '-u, --webUrl <webUrl>'
   - '-l, --listId [listId]'
-  - '--listTitle [listTitle]'
+  - '-t, --listTitle [listTitle]'
   - '-i, --id <id>'
   - '-n, --notificationUrl [notificationUrl]'
   - '-e, --expirationDateTime [expirationDateTime]'
 spo listitem add:
-  - '-w, --webUrl <webUrl>'
+  - '-u, --webUrl <webUrl>'
   - '-l, --listId [listId]'
-  - '--listTitle [listTitle]'
+  - '-t, --listTitle [listTitle]'
   - '-c, --contentType [contentType]'
   - '-f, --folder [folder]'
 spo listitem get:
-  - '-w, --webUrl <webUrl>'
+  - '-u, --webUrl <webUrl>'
   - '-i, --id <id>'
   - '-l, --listId [listId]'
-  - '--listTitle [listTitle]'
+  - '-t, --listTitle [listTitle]'
   - '-f, --fields [fields]'
 spo listitem list:
-  - '-w, --webUrl <webUrl>'
+  - '-u, --webUrl <webUrl>'
   - '-i, --id [listId]'
   - '-t, --title [listTitle]'
-  - '--pageSize [pageSize]'
+  - '-s, --pageSize [pageSize]'
   - '-n, --pageNumber [pageNumber]'
   - '-q, --query [query]'
   - '-f, --fields [fields]'
-  - '--filter [odataFilter]'
+  - '-l, --filter [odataFilter]'
 spo listitem record declare:
-  - '-w, --webUrl <webUrl>'
+  - '-u, --webUrl <webUrl>'
   - '-l, --listId [listId]'
-  - '--listTitle [listTitle]'
+  - '-t, --listTitle [listTitle]'
   - '-i, --id <id>'
   - '-d, --date [date]'
 spo listitem record undeclare:
-  - '-w, --webUrl <webUrl>'
+  - '-u, --webUrl <webUrl>'
   - '-i, --id <id>'
   - '-l, --listId [listId]'
-  - '--listTitle [listTitle]'
+  - '-t, --listTitle [listTitle]'
 spo listitem remove:
-  - '-w, --webUrl <webUrl>'
+  - '-u, --webUrl <webUrl>'
   - '-i, --id <id>'
   - '-l, --listId [listId]'
-  - '--listTitle [listTitle]'
+  - '-t, --listTitle [listTitle]'
   - '--recycle'
   - '--confirm'
 spo listitem set:
-  - '-w, --webUrl <webUrl>'
+  - '-u, --webUrl <webUrl>'
   - '-i, --id <id>'
   - '-l, --listId [listId]'
-  - '--listTitle [listTitle]'
+  - '-t, --listTitle [listTitle]'
   - '-c, --contentType [contentType]'
   - '-s, --systemUpdate'
+spo login:
+  - '-t, --authType [authType]'
+  - '-u, --userName [userName]'
+  - '-p, --password [password]'
+  - '-c, --certificateFile [certificateFile]'
+  - '--thumbprint [thumbprint]'
+spo connect:
+  - '-t, --authType [authType]'
+  - '-u, --userName [userName]'
+  - '-p, --password [password]'
+  - '-c, --certificateFile [certificateFile]'
+  - '--thumbprint [thumbprint]'
+spo logout:
+spo disconnect:
+spo mail send:
+  - '-u, --webUrl <webUrl>'
+  - '--to <to>'
+  - '--subject <subject>'
+  - '--body <body>'
+  - '--from [from]'
+  - '--cc [cc]'
+  - '--bcc [bcc]'
+  - '--additionalHeaders [additionalHeaders]'
 spo navigation node add:
-  - '-w, --webUrl <webUrl>'
+  - '-u, --webUrl <webUrl>'
   - '-l, --location <location>'
   - '-t, --title <title>'
-  - '-u, --url <url>'
+  - '--url <url>'
   - '--parentNodeId [parentNodeId]'
   - '--isExternal'
 spo navigation node list:
-  - '-w, --webUrl <webUrl>'
+  - '-u, --webUrl <webUrl>'
   - '-l, --location <location>'
 spo navigation node remove:
-  - '-w, --webUrl <webUrl>'
+  - '-u, --webUrl <webUrl>'
   - '-l, --location <location>'
   - '-i, --id <id>'
   - '--confirm'
+spo orgnewssite list:
+spo orgnewssite remove:
+  - '-u, --url <url>'
+  - '--confirm'
+spo orgnewssite set:
+  - '-u, --url <url>'
 spo page add:
   - '-n, --name <name>'
-  - '-w, --webUrl <webUrl>'
+  - '-u, --webUrl <webUrl>'
   - '-t, --title [title]'
   - '-l, --layoutType [layoutType]'
   - '-p, --promoteAs [promoteAs]'
-  - '-c, --commentsEnabled'
+  - '--commentsEnabled'
   - '--publish'
   - '--publishMessage [publishMessage]'
 spo page clientsidewebpart add:
-  - '-w, --webUrl <webUrl>'
+  - '-u, --webUrl <webUrl>'
   - '-n, --pageName <pageName>'
   - '--standardWebPart [standardWebPart]'
   - '--webPartId [webPartId]'
   - '--webPartProperties [webPartProperties]'
   - '--webPartData [webPartData]'
-  - '-s, --section [section]'
-  - '-c, --column [column]'
-  - '--order [order]'
-spo page webpart add:
-  - '-w, --webUrl <webUrl>'
-  - '-n, --pageName <pageName>'
-  - '--standardWebPart [standardWebPart]'
-  - '--webPartId [webPartId]'
-  - '--webPartProperties [webPartProperties]'
-  - '--webPartData [webPartData]'
-  - '-s, --section [section]'
-  - '-c, --column [column]'
+  - '--section [section]'
+  - '--column [column]'
   - '--order [order]'
 spo page column get:
-  - '-w, --webUrl <webUrl>'
+  - '-u, --webUrl <webUrl>'
   - '-n, --name <name>'
   - '-s, --section <section>'
   - '-c, --column <column>'
 spo page column list:
-  - '-w, --webUrl <webUrl>'
+  - '-u, --webUrl <webUrl>'
   - '-n, --name <name>'
   - '-s, --section <sectionId>'
 spo page control get:
   - '-i, --id <id>'
   - '-n, --name <name>'
-  - '-w, --webUrl <webUrl>'
+  - '-u, --webUrl <webUrl>'
 spo page control list:
   - '-n, --name <name>'
-  - '-w, --webUrl <webUrl>'
+  - '-u, --webUrl <webUrl>'
 spo page get:
   - '-n, --name <name>'
-  - '-w, --webUrl <webUrl>'
+  - '-u, --webUrl <webUrl>'
 spo page header set:
   - '-n, --pageName <pageName>'
-  - '-w, --webUrl <webUrl>'
-  - '--type [type]'
+  - '-u, --webUrl <webUrl>'
+  - '-t, --type [type]'
   - '--imageUrl [imageUrl]'
   - '--altText [altText]'
   - '-x, --translateX [translateX]'
@@ -891,59 +990,59 @@ spo page header set:
   - '--kicker [kicker]'
   - '--authors [authors]'
 spo page list:
-  - '-w, --webUrl <webUrl>'
+  - '-u, --webUrl <webUrl>'
 spo page remove:
   - '-n, --name <name>'
-  - '-w, --webUrl <webUrl>'
+  - '-u, --webUrl <webUrl>'
   - '--confirm'
 spo page section add:
   - '-n, --name <name>'
-  - '-w, --webUrl <webUrl>'
+  - '-u, --webUrl <webUrl>'
   - '-t, --sectionTemplate <sectionTemplate>'
   - '--order [order]'
 spo page section get:
-  - '-w, --webUrl <webUrl>'
+  - '-u, --webUrl <webUrl>'
   - '-n, --name <name>'
   - '-s, --section <sectionId>'
 spo page section list:
-  - '-w, --webUrl <webUrl>'
+  - '-u, --webUrl <webUrl>'
   - '-n, --name <name>'
 spo page set:
   - '-n, --name <name>'
-  - '-w, --webUrl <webUrl>'
+  - '-u, --webUrl <webUrl>'
   - '-l, --layoutType [layoutType]'
   - '-p, --promoteAs [promoteAs]'
-  - '-c, --commentsEnabled [commentsEnabled]'
+  - '--commentsEnabled [commentsEnabled]'
   - '--publish'
   - '--publishMessage [publishMessage]'
 spo page text add:
-  - '-w, --webUrl <webUrl>'
+  - '-u, --webUrl <webUrl>'
   - '-n, --pageName <pageName>'
   - '-t, --text <text>'
-  - '-s, --section [section]'
-  - '-c, --column [column]'
+  - '--section [section]'
+  - '--column [column]'
   - '--order [order]'
 spo propertybag get:
-  - '-w, --webUrl <webUrl>'
+  - '-u, --webUrl <webUrl>'
   - '-k, --key <key>'
   - '-f, --folder [folder]'
 spo propertybag list:
-  - '-w, --webUrl <webUrl>'
+  - '-u, --webUrl <webUrl>'
   - '-f, --folder [folder]'
 spo propertybag remove:
-  - '-w, --webUrl <webUrl>'
+  - '-u, --webUrl <webUrl>'
   - '-k, --key <key>'
   - '-f, --folder [folder]'
   - '--confirm'
 spo propertybag set:
-  - '-w, --webUrl <webUrl>'
+  - '-u, --webUrl <webUrl>'
   - '-k, --key <key>'
   - '-v, --value <value>'
   - '-f, --folder [folder]'
 spo search:
   - '-q, --query <query>'
-  - '--selectProperties [selectProperties]'
-  - '-w, --webUrl [webUrl]'
+  - '-p, --selectProperties [selectProperties]'
+  - '-u, --webUrl [webUrl]'
   - '--allResults'
   - '--rowLimit [rowLimit]'
   - '--sourceId [sourceId]'
@@ -955,7 +1054,7 @@ spo search:
   - '--sortList [sortList]'
   - '--rankingModelId [rankingModelId]'
   - '--startRow [startRow]'
-  - '-p, --properties [properties]'
+  - '--properties [properties]'
   - '--sourceName [sourceName]'
   - '--refiners [refiners]'
   - '--hiddenConstraints [hiddenConstraints]'
@@ -967,10 +1066,10 @@ spo search:
   - '--rawOutput'
 spo serviceprincipal grant add:
   - '-r, --resource <resource>'
-  - '--scope <scope>'
+  - '-s, --scope <scope>'
 spo sp grant add:
   - '-r, --resource <resource>'
-  - '--scope <scope>'
+  - '-s, --scope <scope>'
 spo serviceprincipal grant list:
 spo sp grant list:
 spo serviceprincipal grant revoke:
@@ -1005,7 +1104,8 @@ spo site add:
   - '--shareByEmailEnabled'
   - '--allowFileSharingForGuestUsers'
   - '--siteDesign [siteDesign]'
-  - '-i, --siteDesignId [siteDesignId]'
+  - '--siteDesignId [siteDesignId]'
+  - '--owners [owners]'
 spo site appcatalog add:
   - '-u, --url <url>'
 spo site appcatalog remove:
@@ -1016,7 +1116,7 @@ spo site classic add:
   - '--owner <owner>'
   - '-z, --timeZone <timeZone>'
   - '-l, --lcid [lcid]'
-  - '--webTemplate [webTemplate]'
+  - '-w, --webTemplate [webTemplate]'
   - '--resourceQuota [resourceQuota]'
   - '--resourceQuotaWarningLevel [resourceQuotaWarningLevel]'
   - '--storageQuota [storageQuota]'
@@ -1024,8 +1124,8 @@ spo site classic add:
   - '--removeDeletedSite'
   - '--wait'
 spo site classic list:
-  - '--webTemplate [webTemplate]'
-  - '--filter [filter]'
+  - '-t, --webTemplate [webTemplate]'
+  - '-f, --filter [filter]'
   - '--includeOneDriveSites'
 spo site classic remove:
   - '-u, --url <url>'
@@ -1046,16 +1146,19 @@ spo site classic set:
   - '--lockState [lockState]'
   - '--noScriptSite [noScriptSite]'
   - '--wait'
+spo site commsite enable:
+  - '-u, --url <url>'
+  - '-i, --designPackageId [designPackageId]'
 spo site get:
   - '-u, --url <url>'
 spo site inplacerecordsmanagement set:
-  - '-s, --siteUrl <siteUrl>'
-  - '-e, --enabled <enabled>'
+  - '-u, --siteUrl <siteUrl>'
+  - '--enabled <enabled>'
 spo site list:
   - '--type [type]'
-  - '--filter [filter]'
+  - '-f, --filter [filter]'
 spo site o365group set:
-  - '-s, --siteUrl <siteUrl>'
+  - '-u, --siteUrl <siteUrl>'
   - '-a, --alias <alias>'
   - '-n, --displayName <displayName>'
   - '-d, --description [description]'
@@ -1063,7 +1166,7 @@ spo site o365group set:
   - '--isPublic'
   - '--keepOldHomepage'
 spo site groupify:
-  - '-s, --siteUrl <siteUrl>'
+  - '-u, --siteUrl <siteUrl>'
   - '-a, --alias <alias>'
   - '-n, --displayName <displayName>'
   - '-d, --description [description]'
@@ -1073,11 +1176,11 @@ spo site groupify:
 spo site set:
   - '-u, --url <url>'
   - '-i, --id [id]'
-  - '-c, --classification [classification]'
+  - '--classification [classification]'
   - '--disableFlows [disableFlows]'
 spo sitedesign add:
   - '-t, --title <title>'
-  - '--webTemplate <webTemplate>'
+  - '-w, --webTemplate <webTemplate>'
   - '-s, --siteScripts <siteScripts>'
   - '-d, --description [description]'
   - '-m, --previewImageUrl [previewImageUrl]'
@@ -1085,7 +1188,7 @@ spo sitedesign add:
   - '--isDefault'
 spo sitedesign apply:
   - '-i, --id <id>'
-  - '-w, --webUrl <webUrl>'
+  - '-u, --webUrl <webUrl>'
   - '--asTask'
 spo sitedesign get:
   - '-i, --id <id>'
@@ -1104,15 +1207,15 @@ spo sitedesign rights revoke:
   - '-p, --principals <principals>'
   - '--confirm'
 spo sitedesign run list:
-  - '-w, --webUrl <webUrl>'
+  - '-u, --webUrl <webUrl>'
   - '-i, --siteDesignId [siteDesignId]'
 spo sitedesign run status get:
-  - '-w, --webUrl <webUrl>'
+  - '-u, --webUrl <webUrl>'
   - '-i, --runId <runId>'
 spo sitedesign set:
   - '-i, --id <id>'
   - '-t, --title [title]'
-  - '--webTemplate [webTemplate]'
+  - '-w, --webTemplate [webTemplate]'
   - '-s, --siteScripts [siteScripts]'
   - '-d, --description [description]'
   - '-m, --previewImageUrl [previewImageUrl]'
@@ -1122,7 +1225,7 @@ spo sitedesign set:
 spo sitedesign task get:
   - '-i, --taskId <taskId>'
 spo sitedesign task list:
-  - '-w, --webUrl <webUrl>'
+  - '-u, --webUrl <webUrl>'
 spo sitescript add:
   - '-t, --title <title>'
   - '-c, --content <content>'
@@ -1139,6 +1242,7 @@ spo sitescript set:
   - '-d, --description [description]'
   - '-v, --version [version]'
   - '-c, --content [content]'
+spo status:
 spo storageentity get:
   - '-k, --key <key>'
 spo storageentity list:
@@ -1157,7 +1261,7 @@ spo tenant appcatalogurl get:
 spo tenant settings list:
 spo tenant settings set:
   - '--MinCompatibilityLevel [MinCompatibilityLevel]'
-  - '--MinCompatibilityLevel [MinCompatibilityLevel]'
+  - '--MaxCompatibilityLevel [MaxCompatibilityLevel]'
   - '--ExternalServicesEnabled [ExternalServicesEnabled]'
   - '--NoAccessRedirectUrl [NoAccessRedirectUrl]'
   - '--SharingCapability [SharingCapability]'
@@ -1213,7 +1317,7 @@ spo tenant settings set:
   - '--FilePickerExternalImageSearchEnabled [FilePickerExternalImageSearchEnabled]'
   - '--EmailAttestationRequired [EmailAttestationRequired]'
   - '--EmailAttestationReAuthDays [EmailAttestationReAuthDays]'
-  - '-h, --HideDefaultThemes [HideDefaultThemes]'
+  - '--HideDefaultThemes [HideDefaultThemes]'
   - '--BlockAccessOnUnmanagedDevices [BlockAccessOnUnmanagedDevices]'
   - '--AllowLimitedAccessOnUnmanagedDevices [AllowLimitedAccessOnUnmanagedDevices]'
   - '--BlockDownloadOfAllFilesForGuests [BlockDownloadOfAllFilesForGuests]'
@@ -1285,7 +1389,8 @@ spo term set list:
   - '--termGroupName [termGroupName]'
 spo theme apply:
   - '-n, --name <name>'
-  - '-w, --webUrl <webUrl>'
+  - '-u, --webUrl <webUrl>'
+  - '--sharePointTheme'
 spo theme get:
   - '-n, --name <name>'
 spo theme list:
@@ -1299,27 +1404,25 @@ spo theme set:
 spo web add:
   - '-t, --title <title>'
   - '-d, --description [description]'
-  - '-w, --webUrl <webUrl>'
-  - '--webTemplate <webTemplate>'
+  - '-u, --webUrl <webUrl>'
+  - '-w, --webTemplate <webTemplate>'
   - '-p, --parentWebUrl <parentWebUrl>'
   - '-l, --locale [locale]'
   - '--breakInheritance'
   - '--inheritNavigation'
 spo web clientsidewebpart list:
-  - '-w, --webUrl <webUrl>'
-spo web webpart list:
-  - '-w, --webUrl <webUrl>'
+  - '-u, --webUrl <webUrl>'
 spo web get:
-  - '-w, --webUrl <webUrl>'
+  - '-u, --webUrl <webUrl>'
 spo web list:
-  - '-w, --webUrl <webUrl>'
+  - '-u, --webUrl <webUrl>'
 spo web reindex:
-  - '-w, --webUrl <webUrl>'
+  - '-u, --webUrl <webUrl>'
 spo web remove:
-  - '-w, --webUrl <webUrl>'
+  - '-u, --webUrl <webUrl>'
   - '--confirm'
 spo web set:
-  - '-w, --webUrl <webUrl>'
+  - '-u, --webUrl <webUrl>'
   - '-t, --title [title]'
   - '-d, --description [description]'
   - '--siteLogoUrl [siteLogoUrl]'
@@ -1327,3 +1430,4 @@ spo web set:
   - '--headerLayout [headerLayout]'
   - '--headerEmphasis [headerEmphasis]'
   - '--megaMenuEnabled [megaMenuEnabled]'
+  - '--footerEnabled [footerEnabled]'
