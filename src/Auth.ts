@@ -28,6 +28,7 @@ export class Service {
   accessTokens: Hash<AccessToken>;
   spoUrl?: string;
   tenantId?: string;
+  clientSecret?: string;
 
   constructor() {
     this.accessTokens = {};
@@ -44,6 +45,7 @@ export class Service {
     this.thumbprint = undefined;
     this.spoUrl = undefined;
     this.tenantId = undefined;
+    this.clientSecret = undefined;
   }
 }
 
@@ -54,7 +56,8 @@ export interface Logger {
 export enum AuthType {
   DeviceCode,
   Password,
-  Certificate
+  Certificate,
+  ClientSecret
 }
 
 export class Auth {
@@ -137,6 +140,9 @@ export class Auth {
             break;
           case AuthType.Certificate:
             getTokenPromise = this.ensureAccessTokenWithCertificate.bind(this);
+            break;
+          case AuthType.ClientSecret:
+            getTokenPromise = this.ensureAccessTokenWithClientSecret.bind(this);
             break;
         }
       }
@@ -328,6 +334,33 @@ export class Auth {
         this.appId as string,
         cert as string,
         this.service.thumbprint as string,
+        (error: Error, response: TokenResponse | ErrorResponse): void => {
+          if (debug) {
+            stdout.log('Response:');
+            stdout.log(response);
+            stdout.log('');
+          }
+
+          if (error) {
+            reject((response && (response as any).error_description) || error.message);
+            return;
+          }
+
+          resolve(<TokenResponse>response);
+        });
+    });
+  }
+
+  private ensureAccessTokenWithClientSecret(resource: string, stdout: Logger, debug: boolean): Promise<TokenResponse> {
+    return new Promise<TokenResponse>((resolve: (tokenResponse: TokenResponse) => void, reject: (error: any) => void): void => {
+      if (debug) {
+        stdout.log(`Retrieving new access token using client secret ...`);
+      }
+
+      this.authCtx.acquireTokenWithClientCredentials(
+        resource,
+        this.appId as string,
+        this.service.clientSecret as string,
         (error: Error, response: TokenResponse | ErrorResponse): void => {
           if (debug) {
             stdout.log('Response:');

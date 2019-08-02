@@ -98,6 +98,23 @@ openssl pkcs12 -in protected.pfx -out privateKeyWithPassphrase.pem -nodes
 
 At this point the `privateKeyWithPassphrase.pem` file can be used to log in the Office 365 CLI following the instructions above for logging in using a PEM certificate.
 
+#### Log in using a client secret
+
+Another way to log in to Office 365 in the Office 365 CLI is by using a client secret. To use this authentication method, set the `OFFICE365CLI_AADAPPID` environment variable to the ID of the Azure AD application that you want to use to authenticate the Office 365 CLI and the `OFFICE365CLI_TENANT` environment variable to the ID of your Azure AD directory. When calling the login command, set the `authType` option to `clientSecret`, then specify the application client secret by using the `secret` option.
+
+Log in to Office 365 using a client secret, execute:
+
+```sh
+login --authType clientSecret --secret 'eV@0001MNVQZyhXc[UJM?M=m4*vyhp]L'
+```
+
+Because there is no user context when logging in using a client secret, you will typically create a new Azure AD application, specific to your organization and grant it the required permissions.
+
+!!! attention
+    You should keep in mind, that because the Office 365 CLI will be accessing these APIs with app-only context, you need to grant the correct application permissions rather than delegated permissions that would be used in other authentication methods.
+
+Logging in using a client secret gives the Office 365 CLI app-only access to Office 365 services. Not all operations support app-only access so it is possible, that some CLI commands will fail when executed while logged in to Office 365 using a client secret.
+
 ### Check login status
 
 To see if you're logged in to Office 365 and if so, with which account, use the `status` command.

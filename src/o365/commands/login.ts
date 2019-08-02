@@ -23,6 +23,7 @@ interface Options extends GlobalOptions {
   password?: string;
   certificateFile?: string;
   thumbprint?: string;
+  secret?: string;
 }
 
 class LoginCommand extends Command {
@@ -54,7 +55,7 @@ class LoginCommand extends Command {
         cmd.log(`Signing in to Office 365...`);
       }
 
-      switch (args.options.authType) {
+      switch ((args.options.authType || '').toLowerCase()) {
         case 'password':
           auth.service.authType = AuthType.Password;
           auth.service.userName = args.options.userName;
@@ -65,6 +66,10 @@ class LoginCommand extends Command {
           auth.service.certificate = fs.readFileSync(args.options.certificateFile as string, 'base64');
           auth.service.thumbprint = args.options.thumbprint;
           auth.service.password = args.options.password;
+          break;
+        case 'clientsecret':
+          auth.service.authType = AuthType.ClientSecret;
+          auth.service.clientSecret = args.options.secret;
           break;
       }
 
@@ -133,8 +138,8 @@ class LoginCommand extends Command {
     const options: CommandOption[] = [
       {
         option: '-t, --authType [authType]',
-        description: 'The type of authentication to use. Allowed values certificate|deviceCode|password. Default deviceCode',
-        autocomplete: ['certificate', 'deviceCode', 'password']
+        description: 'The type of authentication to use. Allowed values certificate|deviceCode|password|clientSecret. Default deviceCode',
+        autocomplete: ['certificate', 'deviceCode', 'password', 'clientSecret']
       },
       {
         option: '-u, --userName [userName]',
@@ -151,6 +156,10 @@ class LoginCommand extends Command {
       {
         option: '--thumbprint [thumbprint]',
         description: 'Certificate thumbprint. Required when authType is set to certificate'
+      },
+      {
+        option: '--secret [secret]',
+        description: 'A secret string that the application uses to prove its identity when requesting a token. Required when authType is set to clientSecret'
       }
     ];
 
@@ -181,6 +190,12 @@ class LoginCommand extends Command {
 
         if (!args.options.thumbprint) {
           return 'Required option thumbprint missing';
+        }
+      }
+
+      if ((args.options.authType || '').toLowerCase() === 'clientsecret') {
+        if (!args.options.secret) {
+          return 'Required option secret missing';
         }
       }
 
@@ -219,7 +234,12 @@ class LoginCommand extends Command {
     by re-authenticating using the device code or by calling
     the ${chalk.blue(commands.LOGOUT)} command.
 
-    To log in to Office 365 using a certificate, you will typically create
+    When logging in to Office 365 using a client secret, the Office 365 CLI will
+    store the client secret so that it can automatically re-authenticate 
+    if necessary. The client secret is removed when re-authenticating or 
+    by calling the ${chalk.blue(commands.LOGOUT)} command.
+
+    To log in to Office 365 using a certificate or client secret, you will typically create
     a custom Azure AD application. To use this application with
     the Office 365 CLI, you will set the ${chalk.grey('OFFICE365CLI_AADAPPID')}
     environment variable to the application's ID and the ${chalk.grey('OFFICE365CLI_TENANT')}
@@ -242,8 +262,10 @@ class LoginCommand extends Command {
       ${commands.LOGIN} --authType certificate --certificateFile /Users/user/dev/localhost.pem --thumbprint 47C4885736C624E90491F32B98855AA8A7562AF1
 
     Log in to Office 365 using a personal information exchange (.pfx) file
-      o365 login --authType certificate --certificateFile /Users/user/dev/localhost.pfx --thumbprint 47C4885736C624E90491F32B98855AA8A7562AF1 --password 'pass@word1'
+      ${commands.LOGIN} --authType certificate --certificateFile /Users/user/dev/localhost.pfx --thumbprint 47C4885736C624E90491F32B98855AA8A7562AF1 --password 'pass@word1'
 
+    Log in to Office 365 using a client secret
+      ${commands.LOGIN} --authType clientSecret --secret 'eV@0001MNVQZyhXc[UJM?M=m4*vyhp]L'
 `);
   }
 }
