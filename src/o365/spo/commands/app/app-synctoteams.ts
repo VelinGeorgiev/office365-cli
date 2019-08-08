@@ -6,6 +6,7 @@ import {
   CommandValidate
 } from '../../../../Command';
 import GlobalOptions from '../../../../GlobalOptions';
+import { ContextInfo, FormDigestInfo } from '../../spo';
 const vorpal: Vorpal = require('../../../../vorpal-init');
 
 interface CommandArgs {
@@ -26,12 +27,20 @@ class SpoAppSyncToTeamsCommand extends SpoAppBaseCommand {
   }
 
   public commandAction(cmd: CommandInstance, args: CommandArgs, cb: (err?: any) => void): void {
+    let appCatalogSiteUrl: string;
+
     this
       .getSpoUrl(cmd, this.debug)
       .then((spoUrl: string): Promise<string> => {
+
         return this.getAppCatalogSiteUrl(cmd, spoUrl, args);
       })
-      .then((appCatalogSiteUrl: string): Promise<string> => {
+      .then((appCatalog: string): Promise<FormDigestInfo> => {
+        appCatalogSiteUrl = appCatalog;
+
+        return this.getRequestDigest(appCatalogSiteUrl);
+      })
+      .then((res: ContextInfo): Promise<string> => {
         if (this.verbose) {
           cmd.log(`Syncing the app...`);
         }
@@ -39,8 +48,10 @@ class SpoAppSyncToTeamsCommand extends SpoAppBaseCommand {
         const requestOptions: any = {
           url: `${appCatalogSiteUrl}/_api/web/tenantappcatalog/SyncSolutionToTeams(id=${args.options.id})`,
           headers: {
+            'X-RequestDigest': res.FormDigestValue,
             accept: 'application/json;odata=nometadata'
-          }
+          },
+          json: true
         };
 
         return request.post(requestOptions);
@@ -51,7 +62,10 @@ class SpoAppSyncToTeamsCommand extends SpoAppBaseCommand {
         }
 
         cb();
-      }, (rawRes: any): void => this.handleRejectedODataPromise(rawRes, cmd, cb));
+      }, (rawRes: any): void => { 
+        cmd.log('ERROR:');
+        cmd.log(JSON.stringify(rawRes));
+        this.handleRejectedODataPromise(rawRes, cmd, cb)});
   }
 
   public options(): CommandOption[] {
