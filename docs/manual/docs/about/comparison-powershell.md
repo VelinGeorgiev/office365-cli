@@ -553,7 +553,7 @@ Set-PnPWikiPageContent|SharePointPnPPowerShellOnline|
 Start-PnPWorkflowInstance|SharePointPnPPowerShellOnline|
 Stop-PnPWorkflowInstance|SharePointPnPPowerShellOnline|
 Submit-PnPSearchQuery|SharePointPnPPowerShellOnline|[spo search](../cmd/spo/search/search.md)
-Sync-PnPAppToTeams|SharePointPnPPowerShellOnline|
+Sync-PnPAppToTeams|SharePointPnPPowerShellOnline|[spo app synctoteams](../cmd/spo/app/app-synctoteams.md)
 Test-PnPListItemIsRecord|SharePointPnPPowerShellOnline|[spo listitem isrecord](../cmd/spo/listitem/listitem-isrecord.md)
 Test-PnPOffice365GroupAliasIsUsed|SharePointPnPPowerShellOnline|
 Test-PnPProvisioningHierarchy|SharePointPnPPowerShellOnline|

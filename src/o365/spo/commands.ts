@@ -8,6 +8,7 @@ export default {
   APP_LIST: `${prefix} app list`,
   APP_REMOVE: `${prefix} app remove`,
   APP_RETRACT: `${prefix} app retract`,
+  APP_SYNCTOTEAMS: `${prefix} app synctoteams`,
   APP_UNINSTALL: `${prefix} app uninstall`,
   APP_UPGRADE: `${prefix} app upgrade`,
   APPPAGE_ADD:`${prefix} apppage add`,

@@ -78,6 +78,7 @@ nav:
         - app list: 'cmd/spo/app/app-list.md'
         - app remove: 'cmd/spo/app/app-remove.md'
         - app retract: 'cmd/spo/app/app-retract.md'
+        - app synctoteams: 'cmd/spo/app/app-synctoteams.md'
         - app uninstall: 'cmd/spo/app/app-uninstall.md'
         - app upgrade: 'cmd/spo/app/app-upgrade.md'
       - apppage:
