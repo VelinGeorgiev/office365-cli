@@ -1,6 +1,7 @@
 import commands from '../../commands';
 import GlobalOptions from '../../../../GlobalOptions';
 import request from '../../../../request';
+const uuidv4 = require('uuid/v4');
 import {
   CommandOption,
   CommandValidate
@@ -48,7 +49,21 @@ interface ListSettings {
   EnableMinorVersions: boolean;
 }
 
+interface FileUploadInfo {
+  Name: string;
+  FilePath: string;
+  WebUrl: string;
+  FolderPath: string;
+  Id: string;
+  Descriptor: number;
+  Size: number;
+  Position: number;
+}
+
 class SpoFileAddCommand extends SpoCommand {
+  private readonly fileChunkingThreshold: number = 50 * 1024 * 1024;  // max 250 MB
+  private readonly fileChunkSize: number = 10 * 1024 * 1024;  // max fileChunkingThreshold
+
   public get name(): string {
     return commands.FILE_ADD;
   }
@@ -124,6 +139,74 @@ class SpoFileAddCommand extends SpoCommand {
           cmd.log(`Upload file to site ${args.options.webUrl}...`);
         }
 
+        const fileStats: fs.Stats = fs.statSync(fullPath);
+        const fileSize: number = fileStats ? fileStats.size : 0;
+        if (this.debug) {
+          cmd.log(`File size is ${fileSize} bytes`);
+        }
+
+        // only up to 250 MB are allowed in a single request
+        if (fileSize > this.fileChunkingThreshold) {
+          const fileChunkCount: number = Math.ceil(fileSize / this.fileChunkSize);
+          if (this.verbose) {
+            cmd.log(`Uploading ${fileSize} bytes in ${fileChunkCount} chunks...`);
+          }
+
+          // initiate chunked upload session
+          const uploadId: string = uuidv4();
+          const requestOptions: any = {
+            url: `${args.options.webUrl}/_api/web/GetFolderByServerRelativeUrl('${encodeURIComponent(folderPath)}')/Files/AddStubUsingPath(DecodedUrl='${encodeURIComponent(fileName)}')/StartUpload(uploadId=guid'${uploadId}')`,
+            headers: {
+              'accept': 'application/json;odata=nometadata'
+            }
+          };
+    
+          return request.post<void>(requestOptions)
+            .then((): Promise<void> => {
+              // session started successfully, now upload our file chunks
+
+              let fileUploadInfo: FileUploadInfo = {
+                Name: fileName,
+                FilePath: fullPath,
+                WebUrl: args.options.webUrl,
+                FolderPath: folderPath,
+                Id: uploadId,
+                Descriptor: 0,
+                Position: 0,
+                Size: fileSize
+              };
+
+              return this.uploadFileChunks(fileUploadInfo, cmd)
+                .then((): Promise<void> => {
+                  if (this.verbose) {
+                    cmd.log(`Finished uploading ${fileUploadInfo.Position} bytes in ${fileChunkCount} chunks`)
+                  }
+                  return Promise.resolve();
+                })
+                .catch((err: any) => {
+                  // cancel upload session
+                  const requestOptions: any = {
+                    url: `${args.options.webUrl}/_api/web/GetFileByServerRelativePath(DecodedUrl='${encodeURIComponent(folderPath + '/' + fileName)}')/cancelupload(uploadId=guid'${uploadId}')`,
+                    headers: {
+                      'accept': 'application/json;odata=nometadata'
+                    }
+                  };
+              
+                  return request.post<void>(requestOptions)
+                    .then((): Promise<void> => {
+                      return Promise.reject(err);  // original error
+                    })
+                    .catch((err_: any) => {
+                      if (this.debug) {
+                        cmd.log(`Failed to cancel upload session: ${err_}`);
+                      }
+                      return Promise.reject(err);  // original error
+                    });
+                });
+            });
+        }
+
+        // upload small file in a single request
         const fileBody: Buffer = fs.readFileSync(fullPath);
         const bodyLength: number = fileBody.byteLength;
 
@@ -475,6 +558,54 @@ class SpoFileAddCommand extends SpoCommand {
 
         return request.post<void>(requestOptions);
       });
+  }
+
+  private uploadFileChunks(info: FileUploadInfo, cmd: any): Promise<void> {
+    try {
+      if (!info.Descriptor) {
+        info.Descriptor = fs.openSync(info.FilePath, 'r');
+      }
+
+      let fileBuffer: Buffer = Buffer.alloc ? Buffer.alloc(this.fileChunkSize) : new Buffer(this.fileChunkSize);
+      const readCount: number = fs.readSync(info.Descriptor, fileBuffer, 0, this.fileChunkSize, null);
+      const offset: number = info.Position;
+      info.Position += readCount;
+      const isLastChunk: boolean = info.Position >= info.Size;
+      if (isLastChunk) {
+        fs.closeSync(info.Descriptor);
+      }
+
+      const requestOptions: any = {
+        url: `${info.WebUrl}/_api/web/GetFileByServerRelativePath(DecodedUrl='${encodeURIComponent(info.FolderPath + '/' + info.Name)}')/${isLastChunk ? 'Finish' : 'Continue'}Upload(uploadId=guid'${info.Id}',fileOffset=${offset})`,
+        body: fileBuffer,
+        headers: {
+          'accept': 'application/json;odata=nometadata',
+          'content-length': readCount
+        }
+      };
+
+      return request.post<void>(requestOptions)
+        .then((): Promise<void> => {
+          if (this.verbose) {
+            cmd.log(`Uploaded ${info.Position} of ${info.Size} bytes (${Math.round(100 * info.Position / info.Size)}%)`);
+          }
+
+          if (isLastChunk) {
+            return Promise.resolve();
+          }
+          else {
+            return this.uploadFileChunks(info, cmd);
+          }
+        })
+        .catch((err: any) => {
+          fs.closeSync(info.Descriptor);
+          return Promise.reject(err);
+        });
+    }
+    catch(err) {
+      fs.closeSync(info.Descriptor);
+      return Promise.reject(err);
+    } 
   }
 
   private getFileParentList(fileName: string, webUrl: string, folder: string, cmd: any): Promise<ListSettings> {
