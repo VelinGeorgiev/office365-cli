@@ -135,6 +135,7 @@ describe(commands.FILE_ADD, () => {
   }
 
   before(() => {
+    sinon.stub(fs, 'statSync').returns({ size: 1234 });
     sinon.stub(fs, 'readFileSync').returns(new Buffer('abc'));
     ensureFolderStub = sinon.stub(FolderExtensions.prototype, 'ensureFolder').resolves();
     sinon.stub(auth, 'restoreAuth').callsFake(() => Promise.resolve());
