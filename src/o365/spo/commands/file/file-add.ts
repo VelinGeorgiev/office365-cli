@@ -55,7 +55,7 @@ interface FileUploadInfo {
   WebUrl: string;
   FolderPath: string;
   Id: string;
-  Descriptor: number;
+  RetriesLeft: number;
   Size: number;
   Position: number;
 }
@@ -63,6 +63,7 @@ interface FileUploadInfo {
 class SpoFileAddCommand extends SpoCommand {
   private readonly fileChunkingThreshold: number = 50 * 1024 * 1024;  // max 250 MB
   private readonly fileChunkSize: number = 10 * 1024 * 1024;  // max fileChunkingThreshold
+  private readonly fileChunkRetryAttempts: number = 5;
 
   public get name(): string {
     return commands.FILE_ADD;
@@ -155,7 +156,7 @@ class SpoFileAddCommand extends SpoCommand {
           // initiate chunked upload session
           const uploadId: string = uuidv4();
           const requestOptions: any = {
-            url: `${args.options.webUrl}/_api/web/GetFolderByServerRelativeUrl('${encodeURIComponent(folderPath)}')/Files/AddStubUsingPath(DecodedUrl='${encodeURIComponent(fileName)}')/StartUpload(uploadId=guid'${uploadId}')`,
+            url: `${args.options.webUrl}/_api/web/GetFolderByServerRelativeUrl('${encodeURIComponent(folderPath)}')/Files/GetByPathOrAddStub(DecodedUrl='${encodeURIComponent(fileName)}')/StartUpload(uploadId=guid'${uploadId}')`,
             headers: {
               'accept': 'application/json;odata=nometadata'
             }
@@ -171,7 +172,7 @@ class SpoFileAddCommand extends SpoCommand {
                 WebUrl: args.options.webUrl,
                 FolderPath: folderPath,
                 Id: uploadId,
-                Descriptor: 0,
+                RetriesLeft: this.fileChunkRetryAttempts,
                 Position: 0,
                 Size: fileSize
               };
@@ -184,9 +185,12 @@ class SpoFileAddCommand extends SpoCommand {
                   return Promise.resolve();
                 })
                 .catch((err: any) => {
-                  // cancel upload session
+                  if (this.verbose) {
+                    cmd.log('Cancelling upload session due to error...')
+                  }
+
                   const requestOptions: any = {
-                    url: `${args.options.webUrl}/_api/web/GetFileByServerRelativePath(DecodedUrl='${encodeURIComponent(folderPath + '/' + fileName)}')/cancelupload(uploadId=guid'${uploadId}')`,
+                    url: `${args.options.webUrl}/_api/web/GetFolderByServerRelativeUrl('${encodeURIComponent(folderPath)}')/Files('${encodeURIComponent(fileName)}')/cancelupload(uploadId=guid'${uploadId}')`,
                     headers: {
                       'accept': 'application/json;odata=nometadata'
                     }
@@ -561,22 +565,20 @@ class SpoFileAddCommand extends SpoCommand {
   }
 
   private uploadFileChunks(info: FileUploadInfo, cmd: any): Promise<void> {
+    let fd: number = 0;
     try {
-      if (!info.Descriptor) {
-        info.Descriptor = fs.openSync(info.FilePath, 'r');
-      }
-
+      fd = fs.openSync(info.FilePath, 'r');
       let fileBuffer: Buffer = Buffer.alloc ? Buffer.alloc(this.fileChunkSize) : new Buffer(this.fileChunkSize);
-      const readCount: number = fs.readSync(info.Descriptor, fileBuffer, 0, this.fileChunkSize, null);
+      const readCount: number = fs.readSync(fd, fileBuffer, 0, this.fileChunkSize, info.Position);
+      fs.closeSync(fd);
+      fd = 0;
+
       const offset: number = info.Position;
       info.Position += readCount;
       const isLastChunk: boolean = info.Position >= info.Size;
-      if (isLastChunk) {
-        fs.closeSync(info.Descriptor);
-      }
 
       const requestOptions: any = {
-        url: `${info.WebUrl}/_api/web/GetFileByServerRelativePath(DecodedUrl='${encodeURIComponent(info.FolderPath + '/' + info.Name)}')/${isLastChunk ? 'Finish' : 'Continue'}Upload(uploadId=guid'${info.Id}',fileOffset=${offset})`,
+        url: `${info.WebUrl}/_api/web/GetFolderByServerRelativeUrl('${encodeURIComponent(info.FolderPath)}')/Files('${encodeURIComponent(info.Name)}')/${isLastChunk ? 'Finish' : 'Continue'}Upload(uploadId=guid'${info.Id}',fileOffset=${offset})`,
         body: fileBuffer,
         headers: {
           'accept': 'application/json;odata=nometadata',
@@ -598,14 +600,36 @@ class SpoFileAddCommand extends SpoCommand {
           }
         })
         .catch((err: any) => {
-          fs.closeSync(info.Descriptor);
-          return Promise.reject(err);
+          if (--info.RetriesLeft > 0) {
+            if (this.verbose) {
+              cmd.log(`Retrying to upload chunk due to error: ${err}`);
+            }
+            info.Position -= readCount;  // rewind
+            return this.uploadFileChunks(info, cmd);
+          }
+          else {
+            return Promise.reject(err);
+          }
         });
     }
     catch(err) {
-      fs.closeSync(info.Descriptor);
-      return Promise.reject(err);
-    } 
+      if (fd) {
+        try {
+          fs.closeSync(fd);
+        }
+        catch(e) {}
+      }
+
+      if (--info.RetriesLeft > 0) {
+        if (this.verbose) {
+          cmd.log(`Retrying to read chunk due to error: ${err}`);
+        }
+        return this.uploadFileChunks(info, cmd);
+      }
+      else {
+        return Promise.reject(err);
+      }
+    }
   }
 
   private getFileParentList(fileName: string, webUrl: string, folder: string, cmd: any): Promise<ListSettings> {

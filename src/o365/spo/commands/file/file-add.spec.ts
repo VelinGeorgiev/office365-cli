@@ -172,6 +172,7 @@ describe(commands.FILE_ADD, () => {
       auth.restoreAuth,
       fs.readFileSync,
       fs.existsSync,
+      fs.statSync,
       FolderExtensions.prototype.ensureFolder,
       appInsights.trackEvent
     ]);
