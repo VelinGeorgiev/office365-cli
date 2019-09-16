@@ -49,3 +49,8 @@ Each command in the Office 365 CLI belongs to a service, for example the [spo si
 ## Communicating with Office 365
 
 Before a command can log in to Office 365, it requires a valid access token. Office 365 CLI automatically obtains the access token for the particular web request without you having to worry about it.
+
+## The Yammer commands are executed in the context of the current logged in user
+
+All Yammer commands require delegated 'user_impersonation' permissions to be granted for an Azure AD application. The Yammer commands are executed in the context of the current logged in user. Certificate-based authentication with app_only permissions is not supported yet. The default Office 365 CLI Azure AD application _PnP Office 365 Management Shell_ does not inlcude Yammer delegated 'user_impersonation' permissions grant and therefore it cannot be used with Yammer commands. Instead, different Azure AD application has to be used.
+
