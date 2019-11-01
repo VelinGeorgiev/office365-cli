@@ -206,20 +206,4 @@ describe('YammerCommand', () => {
       assert.equal(JSON.stringify(err), JSON.stringify({ "message": { "message": "test" } }));
     });
   });
-
-  it('displays 404 error message from Yammer', () => {
-    const cmd = {
-      commandWrapper: {
-        command: 'command'
-      },
-      log: (msg?: string) => { },
-      prompt: () => { }
-    };
-    const mock = new MockCommand();
-    mock.handlePromiseError({
-      statusCode: 404
-    }, cmd, (err?: any) => {
-      assert.equal(JSON.stringify(err), JSON.stringify(new CommandError("Not found (404)")));
-    });
-  });
 });
