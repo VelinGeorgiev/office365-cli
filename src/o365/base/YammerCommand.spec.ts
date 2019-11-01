@@ -171,7 +171,6 @@ describe('YammerCommand', () => {
     }, cmd, (err?: any) => {
       assert.equal(JSON.stringify(err), JSON.stringify(new CommandError('Not found',404)));
     });
-
   });
 
   it('displays error message not from Yammer (1)', () => {
@@ -188,7 +187,6 @@ describe('YammerCommand', () => {
     }, cmd, (err?: any) => {
       assert.equal(JSON.stringify(err), JSON.stringify({ "message": { "error": "not from Yammer" } }));
     });
-
   });
 
   it('displays error message not from Yammer (2)', () => {
