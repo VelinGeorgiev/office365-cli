@@ -423,6 +423,7 @@ nav:
         - id get: 'cmd/tenant/id/id-get.md'
       - report:
         - report activeusercounts: 'cmd/tenant/report/report-activeusercounts.md'
+        - report servicesusercount: 'cmd/tenant/report/report-servicesusercount.md'  
     - Yammer (yammer):
       - group:
         - group list: 'cmd/yammer/group/group-list.md'
