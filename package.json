@@ -20,7 +20,8 @@
     "build": "tsc -p . && node scripts/copy-files.js",
     "watch": "tsc -w -p .",
     "clean": "rimraf ./dist",
-    "test": "nyc -r=lcov -r=text mocha \"dist/**/*.spec.js\""
+    "test": "nyc -r=lcov -r=text mocha \"dist/**/*.spec.js\"",
+    "eslint": "eslint ./src --ext .ts"
   },
   "keywords": [
     "office 365",
@@ -109,7 +110,10 @@
     "@types/semver": "^6.0.0",
     "@types/sinon": "^5.0.5",
     "@types/update-notifier": "^2.5.0",
+    "@typescript-eslint/eslint-plugin": "^2.22.0",
+    "@typescript-eslint/parser": "2.22.0",
     "coveralls": "^3.0.4",
+    "eslint": "^6.8.0",
     "mocha": "^6.1.4",
     "nyc": "^13.3.0",
     "rimraf": "^2.6.3",
