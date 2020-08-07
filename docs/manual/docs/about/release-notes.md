@@ -1,5 +1,13 @@
 # Release notes
 
+## [v2.14.0](https://github.com/pnp/office365-cli/releases/tag/v2.14.0)
+
+### New commands
+
+**SharePoint:**
+
+- [spo group list](../cmd/spo/group/group-list.md) - lists groups from specific web [#1691](https://github.com/pnp/office365-cli/issues/1691)
+
 ## [v2.13.0](https://github.com/pnp/office365-cli/releases/tag/v2.13.0)
 
 ### New commands
